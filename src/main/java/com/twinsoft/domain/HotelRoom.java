@@ -43,6 +43,7 @@ public class HotelRoom implements Serializable {
     @Enumerated(EnumType.STRING)
     private RoomType roomType;
     
+    /** The room price. */
     @NotNull
     @Min(value = 0, message = "priceCannotBeLessThanZero")
     private BigDecimal price;

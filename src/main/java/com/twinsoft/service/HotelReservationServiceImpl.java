@@ -3,8 +3,6 @@
  */
 package com.twinsoft.service;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,6 +10,6 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class HotelServiceImpl implements HotelService {
-
+public class HotelReservationServiceImpl implements HotelReservationService {
+	
 }
