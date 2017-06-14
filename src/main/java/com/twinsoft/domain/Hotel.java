@@ -38,6 +38,6 @@ private static final long serialVersionUID = 8690390386555199353L;
     
     /** The hotel rooms. */
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
-    private List<Room> rooms;
+    private List<HotelRoom> hotelRooms;
 
 }

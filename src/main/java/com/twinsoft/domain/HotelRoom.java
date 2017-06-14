@@ -2,14 +2,15 @@ package com.twinsoft.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,32 +24,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Reservation implements Serializable {
-	/**
-	 * generated value 
-	 */
-	private static final long serialVersionUID = 2117514065166401617L;
+public class HotelRoom implements Serializable {
 
-	/** The hotel id. */
+	private static final long serialVersionUID = 1038141457256654585L;
+	
+	/** The room id. */
     @Id
     @GeneratedValue
     private Long id;
     
-    /** Hotel room type. */
+    /** The hotel. */
+	@ManyToOne(optional = false)
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotel;
+    
+    /** The room type. */
     @NotNull
     @Enumerated(EnumType.STRING)
     private RoomType roomType;
     
-    /** Reservation start date */
     @NotNull
-    private LocalDate startDate;
-    
-    /** Reservation end date */
-    @NotNull
-    private LocalDate endDate;
-    
-    /** Reservation price calculated by date of reservation. */
-    @NotNull
-    private Double price;
+    @Min(value = 0, message = "priceCannotBeLessThanZero")
+    private BigDecimal price;
     
 }
