@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
  * @author miodrag
  */
 @Repository
-public interface HotelRoomRepository extends PagingAndSortingRepository<HotelRoom, Long> {
+public interface HotelRoomRepository extends PagingAndSortingRepository<RoomType, Long> {
 
 }

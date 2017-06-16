@@ -34,8 +34,7 @@ public class HotelReservation implements Serializable {
     
     /** Hotel room type. */
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private RoomType roomType;
+    private RoomTypeEnum roomType;
     
     /** Reservation start date */
     @NotNull

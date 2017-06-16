@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -36,8 +38,12 @@ private static final long serialVersionUID = 8690390386555199353L;
     @NotNull
     private Integer roomNumber;
     
+    /** The room type. */
+    @Enumerated(EnumType.STRING)
+    private RoomTypeEnum roomType;
+    
     /** The hotel rooms. */
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
-    private List<HotelRoom> hotelRooms;
+    private List<RoomType> hotelRooms;
 
 }
