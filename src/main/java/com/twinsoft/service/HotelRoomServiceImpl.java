@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import com.twinsoft.domain.HotelRoomRepository;
+import com.twinsoft.repository.HotelRoomRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

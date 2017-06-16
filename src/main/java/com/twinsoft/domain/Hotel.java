@@ -34,10 +34,10 @@ private static final long serialVersionUID = 8690390386555199353L;
     
     /** Number of rooms **/
     @NotNull
-    private Integer roomNumber;
+    private Integer totalRooms;
     
-    /** The hotel rooms. */
+    /** The hotel room types. */
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
-    private List<HotelRoom> hotelRooms;
+    private List<HotelRoomType> hotelRoomTypes;
 
 }
