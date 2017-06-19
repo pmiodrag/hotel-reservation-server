@@ -112,14 +112,14 @@ public class HotelController {
 	 * @param meterId
 	 * @param month
 	 */
-	@DeleteMapping(value = "/hotel/{hotelId}")
+	@DeleteMapping(value = "/{hotelId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable("hotelId") final Long hotelId) {
 		final Hotel hotel = Optional
 				.ofNullable(hotelService.findByHotelId(hotelId))
 				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
-			hotelService.delete(hotel.getId().toString());
+			hotelService.delete(hotel.getId());
 		} catch (final DataIntegrityViolationException e) {
 			log.error("Exception occurred while deleting meter reading with meterId {} and month {}. Cause: ", hotelId, e);
 			throw new DeleteEntityException("deleteError");

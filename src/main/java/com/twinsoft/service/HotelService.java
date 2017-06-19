@@ -37,7 +37,7 @@ public interface HotelService {
 	 * Delete hotel entity.
 	 * @param id to delete hotel entity with requested id
 	 */
-	void delete(String id);
+	void delete(Long id);
 	
 	
 }

@@ -18,7 +18,7 @@ import com.twinsoft.domain.Hotel;
  *
  */
 @Repository
-public interface HotelRepository extends CrudRepository<Hotel, String> {
+public interface HotelRepository extends CrudRepository<Hotel, Long> {
 	List<Hotel> findAll();
 	Hotel findById(@Param("hotelid") Long hotelid);
 }

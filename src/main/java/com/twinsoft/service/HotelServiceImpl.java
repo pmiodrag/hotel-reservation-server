@@ -47,7 +47,7 @@ public class HotelServiceImpl implements HotelService {
 	 * @see com.twinsoft.service.HotelService#delete(java.lang.String)
 	 */
 	@Override
-	public void delete(final String id) {
+	public void delete(final Long id) {
 		repository.delete(id);
 		
 	}
