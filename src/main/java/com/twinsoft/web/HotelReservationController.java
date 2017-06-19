@@ -77,7 +77,7 @@ public class HotelReservationController {
 		try {
 			final HotelReservation newHotelReservation = hotelReservationService.save(hotelReservation);
 			final HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setLocation(builder.path("/hotels/{hotelId}").buildAndExpand(newHotelReservation.getId()).toUri());
+			httpHeaders.setLocation(builder.path("/hotelreservations/{hotelId}").buildAndExpand(newHotelReservation.getId()).toUri());
 			return httpHeaders;
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
 			throw new PersistEntityException("createMeterReadingError");

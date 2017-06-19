@@ -42,6 +42,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
  	compile('org.projectlombok:lombok:1.16.12')
  	runtime('com.h2database:h2')
+ 	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.1") 
+    compile('com.fasterxml.jackson.datatype:jackson-datatype-joda:2.6.3')
    
     compile('javax.inject:javax.inject:1')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
