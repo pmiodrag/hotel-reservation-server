@@ -5,8 +5,6 @@ package com.twinsoft.service;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 
 import com.twinsoft.domain.Hotel;
@@ -28,7 +26,8 @@ public class HotelServiceImpl implements HotelService {
 	}
 	@Override
 	public List<Hotel> findAll() {
-		return repository.findAll();
+		List<Hotel> hotels = repository.findAll();
+		return hotels;
 	}
  
 }

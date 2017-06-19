@@ -6,7 +6,6 @@ directory: d:\test
 
 server:
   port: ${PORT:9080}
-
 spring:
     profiles:
         active: dev
@@ -16,8 +15,12 @@ spring:
             platform: h2
             databaseName:
             serverName:
-            username:
+            username: sa
             password:
+    h2:
+        console:
+          enabled: true
+          path: /h2
     jpa:
         database-platform: org.hibernate.dialect.H2Dialect
         database: H2
