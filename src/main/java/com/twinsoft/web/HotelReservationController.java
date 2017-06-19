@@ -64,20 +64,19 @@ public class HotelReservationController {
 	}
 	
 	/**
+	 * Rest endpoint for creating and saving hotel reservation.
+	 * 
 	 * @param hotelReservation
-	 * @param errors
 	 * @param builder
 	 * @return
 	 */
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public HttpHeaders create(@Valid @RequestBody final HotelReservation hotelReservation, final BindingResult errors,
-			final UriComponentsBuilder builder) {
-		
+	public HttpHeaders create(@Valid @RequestBody final HotelReservation hotelReservation, final UriComponentsBuilder builder) {		
 		try {
 			final HotelReservation newHotelReservation = hotelReservationService.save(hotelReservation);
 			final HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setLocation(builder.path("/hotelreservations/{hotelId}").buildAndExpand(newHotelReservation.getId()).toUri());
+			httpHeaders.setLocation(builder.path("/hotelreservations/{hotelReservationId}").buildAndExpand(newHotelReservation.getId()).toUri());
 			return httpHeaders;
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
 			throw new PersistEntityException("createMeterReadingError");
@@ -86,12 +85,11 @@ public class HotelReservationController {
 	
 
 	/**
-	 * Rest endpoint for updating a meter reading by meter id.
+	 * Rest endpoint for updating a hotel reservation with reservation id.
 	 *
-	 * @param meterReading
-	 * @param errors
-	 * @param meterId
-	 * @return ResponseEntity<Meter>
+	 * @param hotelReservationId
+	 * @param hotelReservation
+	 * @return
 	 */
 	@PutMapping(value="/{hotelReservationId}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<HotelReservation> update(@PathVariable final Long hotelReservationId, @Valid @RequestBody final HotelReservation hotelReservation) {		
@@ -100,26 +98,25 @@ public class HotelReservationController {
 			final HotelReservation updateHotelReservation  = hotelReservationService.save(hotelReservation);
 			return new ResponseEntity<>(updateHotelReservation, HttpStatus.OK);
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
-			log.error("Exception occurred while updating Meter with id {}. Cause: ", hotelReservationId, e);
+			log.error("Exception occurred while updating hotel reservation with id {}. Cause: ", hotelReservationId, e);
 			throw new UpdateEntityException();
 		}
 	}
 	/**
-	 * Rest endpoint for deleting a meterReading of a meter for month.
+	 * Rest endpoint for deleting a hotel reservation with reservation id.
 	 *
-	 * @param meterId
-	 * @param month
+	 * @param hotelReservationId
 	 */
-	@DeleteMapping(value = "/hotel/{hotelId}")
+	@DeleteMapping(value = "/{hotelReservationId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable("hotelId") final Long hotelReservationId) {
+	public void delete(@PathVariable("hotelReservationId") final Long hotelReservationId) {
 		final HotelReservation hotelReservation = Optional
 				.ofNullable(hotelReservationService.findByHoteReservationlId(hotelReservationId))
 				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
 			hotelReservationService.delete(hotelReservation.getId());
 		} catch (final DataIntegrityViolationException e) {
-			log.error("Exception occurred while deleting meter reading with meterId {} and month {}. Cause: ", hotelReservationId, e);
+			log.error("Exception occurred while deleting hotel reservation with reservation id {}. Cause: ", hotelReservationId, e);
 			throw new DeleteEntityException("deleteError");
 		}
 	}
