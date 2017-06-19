@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.twinsoft.domain.Hotel;
 import com.twinsoft.repository.HotelRepository;
 
+
 /**
- * @author miodrag
- *
+ * Implementation of hotel service.
+ * 
+ * @author Miodrag Pavkovic
  */
 @Service
 public class HotelServiceImpl implements HotelService {
@@ -30,8 +32,7 @@ public class HotelServiceImpl implements HotelService {
 	 */
 	@Override
 	public List<Hotel> findAll() {
-		List<Hotel> hotels = repository.findAll();
-		return hotels;
+		return repository.findAll();
 	}
 	
 	/* (non-Javadoc)

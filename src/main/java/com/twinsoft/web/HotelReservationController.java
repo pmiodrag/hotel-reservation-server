@@ -23,13 +23,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.twinsoft.domain.Hotel;
-import com.twinsoft.service.HotelService;
+import com.twinsoft.domain.HotelReservation;
+import com.twinsoft.service.HotelReservationService;
 import com.twinsoft.util.exception.DeleteEntityException;
 import com.twinsoft.util.exception.PersistEntityException;
 import com.twinsoft.util.exception.ResourceNotFoundException;
@@ -37,49 +36,48 @@ import com.twinsoft.util.exception.UpdateEntityException;
 
 import lombok.extern.slf4j.Slf4j;
 /**
- * Rest controller for exposing Hotel endpoints.
+ * Rest controller for exposing hotel reservation endpoints.
  * @author miodrag
  */
 @Slf4j
 @RestController
-@RequestMapping("hotels")
-public class HotelController {
+@RequestMapping("hotelreservations")
+public class HotelReservationController {
 	private static final String RESOURCE_NOT_FOUND_MESSAGE = null;
 	/** The hotel service */
-	private final HotelService hotelService;
+	private final HotelReservationService hotelReservationService;
 
 	@Inject
-	public HotelController(final HotelService hotelService) {
-		this.hotelService = hotelService;
+	public HotelReservationController(final HotelReservationService hotelReservationService) {
+		this.hotelReservationService = hotelReservationService;
 	}
 	
 
 	/**
-	 * Rest endpoint for retrieving all hotels.
+	 * Rest endpoint for retrieving all hotel reservations.
 	 *
-	 * @param pageable
-	 * @return ResponseEntity<List<Hotel>>
+	 * @return ResponseEntity<Page<Hotel>>
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Hotel>> findAll() {
-		return new ResponseEntity<>(hotelService.findAll(), HttpStatus.OK);
+	public ResponseEntity<List<HotelReservation>> findAll() {
+		return new ResponseEntity<>(hotelReservationService.findAll(), HttpStatus.OK);
 	}
 	
 	/**
-	 * @param hotel
+	 * @param hotelReservation
 	 * @param errors
 	 * @param builder
 	 * @return
 	 */
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public HttpHeaders create(@Valid @RequestBody final Hotel hotel, final BindingResult errors,
+	public HttpHeaders create(@Valid @RequestBody final HotelReservation hotelReservation, final BindingResult errors,
 			final UriComponentsBuilder builder) {
 		
 		try {
-			final Hotel newHotel = hotelService.save(hotel);
+			final HotelReservation newHotelReservation = hotelReservationService.save(hotelReservation);
 			final HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setLocation(builder.path("/hotels/{hotelId}").buildAndExpand(newHotel.getId()).toUri());
+			httpHeaders.setLocation(builder.path("/hotels/{hotelId}").buildAndExpand(newHotelReservation.getId()).toUri());
 			return httpHeaders;
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
 			throw new PersistEntityException("createMeterReadingError");
@@ -95,14 +93,14 @@ public class HotelController {
 	 * @param meterId
 	 * @return ResponseEntity<Meter>
 	 */
-	@PutMapping(value="/{hotelId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Hotel> update(@PathVariable final Long hotelId, @Valid @RequestBody final Hotel hotel) {		
+	@PutMapping(value="/{hotelReservationId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<HotelReservation> update(@PathVariable final Long hotelReservationId, @Valid @RequestBody final HotelReservation hotelReservation) {		
 		try {
-			hotel.setId(hotelId);
-			final Hotel updatedHotel = hotelService.save(hotel);
-			return new ResponseEntity<>(updatedHotel, HttpStatus.OK);
+			hotelReservation.setId(hotelReservationId);
+			final HotelReservation updateHotelReservation  = hotelReservationService.save(hotelReservation);
+			return new ResponseEntity<>(updateHotelReservation, HttpStatus.OK);
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
-			log.error("Exception occurred while updating Meter with id {}. Cause: ", hotelId, e);
+			log.error("Exception occurred while updating Meter with id {}. Cause: ", hotelReservationId, e);
 			throw new UpdateEntityException();
 		}
 	}
@@ -114,14 +112,14 @@ public class HotelController {
 	 */
 	@DeleteMapping(value = "/hotel/{hotelId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable("hotelId") final Long hotelId) {
-		final Hotel hotel = Optional
-				.ofNullable(hotelService.findByHotelId(hotelId))
+	public void delete(@PathVariable("hotelId") final Long hotelReservationId) {
+		final HotelReservation hotelReservation = Optional
+				.ofNullable(hotelReservationService.findByHoteReservationlId(hotelReservationId))
 				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
-			hotelService.delete(hotel.getId().toString());
+			hotelReservationService.delete(hotelReservation.getId());
 		} catch (final DataIntegrityViolationException e) {
-			log.error("Exception occurred while deleting meter reading with meterId {} and month {}. Cause: ", hotelId, e);
+			log.error("Exception occurred while deleting meter reading with meterId {} and month {}. Cause: ", hotelReservationId, e);
 			throw new DeleteEntityException("deleteError");
 		}
 	}

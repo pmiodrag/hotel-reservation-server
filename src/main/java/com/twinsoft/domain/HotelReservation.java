@@ -3,6 +3,7 @@ package com.twinsoft.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,9 +14,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.twinsoft.domain.Hotel.HotelBuilder;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -27,11 +31,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode(callSuper = false)
+@Builder
 public class HotelReservation implements Serializable {
 
 	private static final long serialVersionUID = 2117514065166401617L;
 
-	/** The hotel id. */
+	/** The hotel reservation id. */
     @Id
     @GeneratedValue
     private Long id;

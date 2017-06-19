@@ -3,13 +3,65 @@
  */
 package com.twinsoft.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.twinsoft.domain.Hotel;
+import com.twinsoft.domain.HotelReservation;
+import com.twinsoft.repository.HotelReservationRepository;
+
+
 /**
- * @author miodrag
- *
+ * Implementation of hotel reservation service.
+ * 
+ * @author Miodrag Pavkovic
  */
 @Service
 public class HotelReservationServiceImpl implements HotelReservationService {
+	
+	private final HotelReservationRepository hotelReservationRepository;
+	
+	/**
+	 * @param hotelReservationRepository
+	 */
+	public HotelReservationServiceImpl(HotelReservationRepository hotelReservationRepository) {
+		this.hotelReservationRepository = hotelReservationRepository;
+	}	
+
+	/* (non-Javadoc)
+	 * @see com.twinsoft.service.HotelReservationService#findByHoteReservationlId(java.lang.Long)
+	 */
+	@Override
+	public HotelReservation findByHoteReservationlId(Long id) {
+		return hotelReservationRepository.findById(id);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.twinsoft.service.HotelReservationService#findAll()
+	 */
+	@Override
+	public List<HotelReservation> findAll() {
+		return hotelReservationRepository.findAll();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.twinsoft.service.HotelReservationService#save(com.twinsoft.domain.HotelReservation)
+	 */
+	@Override
+	public HotelReservation save(HotelReservation hotelReservation) {
+		return hotelReservationRepository.save(hotelReservation);
+	}
+
+	
+	/* (non-Javadoc)
+	 * @see com.twinsoft.service.HotelReservationService#delete(java.lang.Long)
+	 */
+	@Override
+	public void delete(final Long id) {
+		hotelReservationRepository.delete(id);		
+	}
+	
+
 	
 }
