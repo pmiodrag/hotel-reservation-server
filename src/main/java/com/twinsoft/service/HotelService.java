@@ -13,14 +13,31 @@ import com.twinsoft.domain.Hotel;
  * @author miodrag 
  */
 public interface HotelService {
+	
 	/**
-	 * @return
+	 * Find specific hotel.
+	 * 
+	 * @param id to find the hotel with requested id
+	 * @return hotel entity with requested id
+	 */
+	Hotel findByHotelId(Long id);
+	/**
+	 * Retrieves the list of all hotels.
+	 * @return list of hotels
 	 */
 	List<Hotel> findAll();
 	
 	/**
-	 * @return
+	 * Create and save new hotel.
+	 * @return Hotel entity
 	 */
 	Hotel save(Hotel hotel);
+	
+	/**
+	 * Delete hotel entity.
+	 * @param id to delete hotel entity with requested id
+	 */
+	void delete(String id);
+	
 	
 }

@@ -6,6 +6,7 @@ package com.twinsoft.repository;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.twinsoft.domain.Hotel;
@@ -17,6 +18,7 @@ import com.twinsoft.domain.Hotel;
  *
  */
 @Repository
-public interface HotelRepository extends CrudRepository<Hotel, Long> {
+public interface HotelRepository extends CrudRepository<Hotel, String> {
 	List<Hotel> findAll();
+	Hotel findById(@Param("hotelid") Long hotelid);
 }

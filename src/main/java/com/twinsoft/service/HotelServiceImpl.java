@@ -41,5 +41,22 @@ public class HotelServiceImpl implements HotelService {
 	public Hotel save(Hotel hotel) {
 		return repository.save(hotel);
 	}
+
+	/* (non-Javadoc)
+	 * @see com.twinsoft.service.HotelService#delete(java.lang.String)
+	 */
+	@Override
+	public void delete(final String id) {
+		repository.delete(id);
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.twinsoft.service.HotelService#findOne(java.lang.String)
+	 */
+	@Override
+	public Hotel findByHotelId(Long id) {
+		return repository.findById(id);
+	}
  
 }

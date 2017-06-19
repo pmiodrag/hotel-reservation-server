@@ -1,8 +1,8 @@
 package com.twinsoft.domain;
 
 /**
- * @author miodrag
- *
+ * Represent room type.
+ * @author Miodrag Pavkovic
  */
 public enum RoomType {
 	SINGLE("Single"),
