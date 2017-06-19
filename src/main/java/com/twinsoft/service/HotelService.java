@@ -13,5 +13,14 @@ import com.twinsoft.domain.Hotel;
  * @author miodrag 
  */
 public interface HotelService {
+	/**
+	 * @return
+	 */
 	List<Hotel> findAll();
+	
+	/**
+	 * @return
+	 */
+	Hotel save(Hotel hotel);
+	
 }

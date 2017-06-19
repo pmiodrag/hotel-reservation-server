@@ -24,10 +24,22 @@ public class HotelServiceImpl implements HotelService {
 	public HotelServiceImpl(HotelRepository repository) {
 		this.repository = repository;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.twinsoft.service.HotelService#findAll()
+	 */
 	@Override
 	public List<Hotel> findAll() {
 		List<Hotel> hotels = repository.findAll();
 		return hotels;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.twinsoft.service.HotelService#save(com.twinsoft.domain.Hotel)
+	 */
+	@Override
+	public Hotel save(Hotel hotel) {
+		return repository.save(hotel);
 	}
  
 }

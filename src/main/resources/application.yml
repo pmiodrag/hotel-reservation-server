@@ -13,7 +13,7 @@ spring:
             dataSourceClassName: org.h2.jdbcx.JdbcDataSource
             url: jdbc:h2:mem:myDb;DB_CLOSE_DELAY=-1
             platform: h2
-            databaseName:
+            databaseName: myDb
             serverName:
             username: sa
             password:
