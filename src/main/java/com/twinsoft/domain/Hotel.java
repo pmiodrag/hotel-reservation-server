@@ -53,6 +53,7 @@ private static final long serialVersionUID = 8690390386555199353L;
     /** The hotel room types. */
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     @JsonIgnore
+    @NotNull
     private List<HotelRoomType> hotelRoomTypes;
 
 }

@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.twinsoft.domain.Hotel;
 import com.twinsoft.domain.HotelReservation;
 import com.twinsoft.repository.HotelReservationRepository;
 

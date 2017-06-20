@@ -5,16 +5,19 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.twinsoft.domain.Hotel.HotelBuilder;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,6 +44,10 @@ public class HotelReservation implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+    
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotel;
     
     /** Hotel room type. */
     @NotNull
