@@ -41,6 +41,9 @@ private static final long serialVersionUID = 8690390386555199353L;
     @GeneratedValue
     private Long id;
     
+    @NotNull
+    private String name;
+    
     /** Number of rooms **/
     @NotNull
     private Integer totalRooms;
