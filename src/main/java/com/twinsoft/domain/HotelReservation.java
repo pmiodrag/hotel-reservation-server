@@ -45,7 +45,7 @@ public class HotelReservation implements Serializable {
     @GeneratedValue
     private Long id;
     
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
     
