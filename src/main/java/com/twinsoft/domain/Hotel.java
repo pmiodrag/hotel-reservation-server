@@ -21,6 +21,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author miodrag
@@ -33,6 +34,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @EqualsAndHashCode(callSuper = false)
 @Builder
+@ToString(exclude = "hotelRoomTypes")
 public class Hotel implements Serializable {
 	
 private static final long serialVersionUID = 8690390386555199353L;
