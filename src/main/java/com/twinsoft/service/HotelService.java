@@ -9,8 +9,8 @@ import com.twinsoft.domain.Hotel;
 
 /**
  * HotelService interface
- * 
- * @author miodrag 
+ *
+ * @author Miodrag Pavkovic
  */
 public interface HotelService {
 	

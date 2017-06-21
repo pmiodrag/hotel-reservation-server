@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -36,6 +37,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @EqualsAndHashCode(callSuper = false)
 @Builder
+@NamedQuery(name = "HotelReservation.findAllByStartDateBeforeAndEndDateAfter",
+query = "select hr from HotelReservation hr where hr.startDate < ?1 and hr.endDate > ?1")
 public class HotelReservation implements Serializable {
 
 	private static final long serialVersionUID = 2117514065166401617L;
@@ -45,7 +48,7 @@ public class HotelReservation implements Serializable {
     @GeneratedValue
     private Long id;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
     

@@ -3,6 +3,7 @@
  */
 package com.twinsoft.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
@@ -17,6 +18,9 @@ import com.twinsoft.domain.HotelReservation;
  */
 @Repository
 public interface HotelReservationRepository extends CrudRepository<HotelReservation, Long> {
+	
 	List<HotelReservation> findAll();
 	HotelReservation findById(@Param("hotelreservationid") Long hotelreservationid);
+	
+	List<HotelReservation> findAllByStartDateBeforeAndEndDateAfter(LocalDate currentDate);
 }

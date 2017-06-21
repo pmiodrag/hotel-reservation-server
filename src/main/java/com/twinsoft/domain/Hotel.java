@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -54,7 +55,7 @@ private static final long serialVersionUID = 8690390386555199353L;
     private HotelRating rating;
     
     /** The hotel room types. */
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "hotel", cascade = CascadeType.ALL)
     @JsonIgnore
     @NotNull
     private List<HotelRoomType> hotelRoomTypes;

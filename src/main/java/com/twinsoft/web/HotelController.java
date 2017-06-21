@@ -4,6 +4,7 @@
 package com.twinsoft.web;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -27,7 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.twinsoft.domain.Hotel;
+import com.twinsoft.domain.HotelRating;
+import com.twinsoft.domain.RoomType;
 import com.twinsoft.service.HotelService;
+import com.twinsoft.service.ManageHotelService;
 import com.twinsoft.util.exception.DeleteEntityException;
 import com.twinsoft.util.exception.PersistEntityException;
 import com.twinsoft.util.exception.ResourceNotFoundException;
@@ -45,10 +49,13 @@ public class HotelController {
 	private static final String RESOURCE_NOT_FOUND_MESSAGE = null;
 	/** The hotel service */
 	private final HotelService hotelService;
+	
+	 private final ManageHotelService manageHotelService;
 
 	@Inject
-	public HotelController(final HotelService hotelService) {
+	public HotelController(final HotelService hotelService, final ManageHotelService manageHotelService) {
 		this.hotelService = hotelService;
+		this.manageHotelService = manageHotelService;
 	}	
 
 	/**
@@ -118,5 +125,16 @@ public class HotelController {
 			log.error("Exception occurred while deleting meter reading with hotel id {}. Cause: ", hotelId, e);
 			throw new DeleteEntityException("deleteError");
 		}
+	}
+	
+	/**
+	 * Rest endpoint for retrieving all hotels.
+	 *
+	 * @param pageable
+	 * @return ResponseEntity<List<Hotel>>
+	 */
+	@GetMapping(value="/checkAvailableRooms/{roomType}/{hotelRating}",  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<Hotel, Boolean>> checkHotelAvailableRooms(@PathVariable("roomType") final RoomType roomType, @PathVariable("hotelRating") final HotelRating hotelRating) {
+		return new ResponseEntity<>(manageHotelService.checkHotelsAvailableRooms(roomType, hotelRating), HttpStatus.OK);
 	}
 }
