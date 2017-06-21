@@ -45,13 +45,12 @@ public class ManageHotelServiceImpl implements ManageHotelService {
 	
 	@Override
 	public boolean checkHotelAvailableRooms(Hotel hotel, RoomType roomType, HotelRating hotelRating) {
-		List<HotelRoomType> matchingHotelRoomTypes  = hotel.getHotelRoomTypes();
-//		Predicate<HotelRoomType> checkRoomType = hotelRoomType -> hotelRoomType.getRoomType().equals(roomType);
-//		List<HotelReservation> hotelReservations = getMatchingHotelReservations(hotel, roomType);
-//		List<HotelRoomType> matchingHotelRoomTypes = hotel.getHotelRoomTypes().stream().filter(checkRoomType).collect(Collectors.toList());
-//		if (hotelReservations.size() < matchingHotelRoomTypes.size() ) {
-//			return true;
-//		}
+		Predicate<HotelRoomType> checkRoomType = hotelRoomType -> hotelRoomType.getRoomType().equals(roomType);
+		List<HotelReservation> hotelReservations = getMatchingHotelReservations(hotel, roomType);
+		List<HotelRoomType> matchingHotelRoomTypes = hotel.getHotelRoomTypes().stream().filter(checkRoomType).collect(Collectors.toList());
+		if (hotelReservations.size() < matchingHotelRoomTypes.size() ) {
+			return true;
+		}
 		return false;
 	}
 
