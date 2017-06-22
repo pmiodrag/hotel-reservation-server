@@ -31,6 +31,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.twinsoft.domain.Hotel;
 import com.twinsoft.domain.HotelRating;
+import com.twinsoft.domain.HotelRoomType;
 import com.twinsoft.domain.RoomType;
 import com.twinsoft.event.HotelEventMessage;
 import com.twinsoft.service.HotelService;
@@ -156,11 +157,33 @@ public class HotelController {
 		return new ResponseEntity<>(manageHotelService.checkHotelsAvailableRooms(roomType, hotelRating), HttpStatus.OK);
 	}
 	
+
+	/**
+	 * Rest endpoint to check all hotels for available rooms with specified room type and rating.
+	 *
+	 * @param pageable
+	 * @return ResponseEntity<List<Hotel>>
+	 */
+	@GetMapping(value="/summaryHotelsTotalRooms",  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<Hotel, List<HotelRoomType>>> summaryHotelsTotalRooms() {
+		return new ResponseEntity<>(manageHotelService.hotelTotalRooms(), HttpStatus.OK);
+	}
+	
+	/**
+	 * Rest endpoint to check all hotels for available rooms with specified room type and rating.
+	 *
+	 * @param pageable
+	 * @return ResponseEntity<List<Hotel>>
+	 */
+	@GetMapping(value="/summaryAvailableRooms",  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<Hotel, List<HotelRoomType>>> summaryAvailableRooms() {
+		return new ResponseEntity<>(manageHotelService.availableHotelRooms(), HttpStatus.OK);
+	}
+	
 	private void publishHotelEvent(Hotel newHotel, String eventType) {
 		rabbitTemplate.setExchange(exchange);
 		rabbitTemplate.convertAndSend(createRoutingkey,
 				new HotelEventMessage(newHotel.getId(), eventType));
 		rabbitTemplate.convertAndSend(newHotel);
-		
 	}
 }
