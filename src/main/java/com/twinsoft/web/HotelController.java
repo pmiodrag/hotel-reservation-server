@@ -128,7 +128,7 @@ public class HotelController {
 	}
 	
 	/**
-	 * Rest endpoint for retrieving all hotels.
+	 * Rest endpoint to check all hotels for available rooms with specified room type and rating.
 	 *
 	 * @param pageable
 	 * @return ResponseEntity<List<Hotel>>

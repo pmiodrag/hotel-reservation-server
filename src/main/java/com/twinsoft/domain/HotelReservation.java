@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -39,7 +41,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NamedQuery(name = "HotelReservation.findAllByStartDateBeforeAndEndDateAfter",
 query = "select hr from HotelReservation hr where hr.startDate < ?1 and hr.endDate > ?1")
-public class HotelReservation implements Serializable {
+public class HotelReservation implements Serializable, DomainOperations<HotelReservation> {
 
 	private static final long serialVersionUID = 2117514065166401617L;
 
