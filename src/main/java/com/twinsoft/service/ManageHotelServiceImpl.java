@@ -126,10 +126,10 @@ public class ManageHotelServiceImpl implements ManageHotelService {
 		List<HotelReservation> reservations = hotelReservationRepository.findAllByStartDateBeforeAndEndDateAfter(LocalDate.now());		
 		List<HotelReservation> hotelReservations = HotelReservationPredicate.filter(reservations, HotelReservationPredicate.matchHotelId(hotel));
 		List<HotelRoomType> totalHotelRooms = hotel.getHotelRoomTypes();
-		List<HotelRoomType>  reservedHotelRooms = availableHotelRoomTypes(hotelReservations, RoomType.SINGLE, totalHotelRooms);
+		List<HotelRoomType>  availableHotelRooms = availableHotelRoomTypes(hotelReservations, RoomType.SINGLE, totalHotelRooms);
 		
-		reservedHotelRooms.addAll(availableHotelRoomTypes(hotelReservations, RoomType.DOUBLE, totalHotelRooms));
-		return reservedHotelRooms;
+		availableHotelRooms.addAll(availableHotelRoomTypes(hotelReservations, RoomType.DOUBLE, totalHotelRooms));
+		return availableHotelRooms;
 	}
 
 	/**
@@ -146,11 +146,22 @@ public class ManageHotelServiceImpl implements ManageHotelService {
 		return reservedHotelRooms;
 	}
 	
-	private List<HotelRoomType> availableHotelRoomTypes (List<HotelReservation> hotelReservations, RoomType roomType, List<HotelRoomType> totalHotelRooms) {
-		long countReservedRooms = hotelReservations.stream().filter(HotelReservationPredicate.matchRoomType(roomType)).count();
+	/**
+	 * @param hotelReservations
+	 * @param roomType
+	 * @param totalHotelRooms
+	 * @return
+	 */
+	private List<HotelRoomType> availableHotelRoomTypes (List<HotelReservation> hotelReservations, RoomType roomType, List<HotelRoomType> totalHotelRooms) { long countReservedRooms = hotelReservations.stream().filter(HotelReservationPredicate.matchRoomType(roomType)).count();
 		return HotelRoomTypePredicate.filterWithLimit(totalHotelRooms, HotelRoomTypePredicate.matchRoomType(roomType), totalHotelRooms.size() - countReservedRooms);
 	}
 	
+	/**
+	 * @param hotelReservations
+	 * @param roomType
+	 * @param totalHotelRooms
+	 * @return
+	 */
 	private List<HotelRoomType> reservedHotelRoomTypes (List<HotelReservation> hotelReservations, RoomType roomType, List<HotelRoomType> totalHotelRooms) {
 		long countReservedRooms = hotelReservations.stream().filter(HotelReservationPredicate.matchRoomType(roomType)).count();
 		return HotelRoomTypePredicate.filterWithLimit(totalHotelRooms, HotelRoomTypePredicate.matchRoomType(roomType), totalHotelRooms.size() - countReservedRooms);
