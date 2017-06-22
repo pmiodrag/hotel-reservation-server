@@ -33,3 +33,14 @@ spring:
         properties:
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
+    rabbitmq:
+        username: guest
+        password: guest
+        host: localhost
+        port: 5672
+        consumer:
+hotelserver:
+  amqp:
+    exchange: twinsoft.hotelserver.exchange  
+    queue: twinsoft.hotelserver.hotel.queue
+    routing-key: twinsoft.hotelserver.hotel.key  

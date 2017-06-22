@@ -11,6 +11,8 @@ import javax.inject.Inject;
 import javax.persistence.TransactionRequiredException;
 import javax.validation.Valid;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.twinsoft.domain.Hotel;
 import com.twinsoft.domain.HotelRating;
 import com.twinsoft.domain.RoomType;
+import com.twinsoft.event.HotelEventMessage;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
 import com.twinsoft.util.exception.DeleteEntityException;
@@ -50,12 +53,25 @@ public class HotelController {
 	/** The hotel service */
 	private final HotelService hotelService;
 	
-	 private final ManageHotelService manageHotelService;
+	private final ManageHotelService manageHotelService;
+	 
+	 /** The RabbitMQ template */
+	private final RabbitTemplate rabbitTemplate;
+	
+	@Value("${hotelserver.amqp.exchange}")
+	private String exchange;
+
+	/** The contract createed routing key */
+	@Value("${hotelserver.amqp.routing-key}")
+	private String createRoutingkey;
+
+
 
 	@Inject
-	public HotelController(final HotelService hotelService, final ManageHotelService manageHotelService) {
+	public HotelController(final HotelService hotelService, final ManageHotelService manageHotelService,  final RabbitTemplate rabbitTemplate) {
 		this.hotelService = hotelService;
 		this.manageHotelService = manageHotelService;
+		this.rabbitTemplate = rabbitTemplate;
 	}	
 
 	/**
@@ -81,6 +97,8 @@ public class HotelController {
 	public HttpHeaders create(@Valid @RequestBody final Hotel hotel, final UriComponentsBuilder builder) {		
 		try {
 			final Hotel newHotel = hotelService.save(hotel);
+			publishHotelEvent(newHotel, "created");
+			
 			final HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.setLocation(builder.path("/hotels/{hotelId}").buildAndExpand(newHotel.getId()).toUri());
 			return httpHeaders;
@@ -136,5 +154,13 @@ public class HotelController {
 	@GetMapping(value="/checkAvailableRooms/{roomType}/{hotelRating}",  produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Map<Hotel, Boolean>> checkHotelAvailableRooms(@PathVariable("roomType") final RoomType roomType, @PathVariable("hotelRating") final HotelRating hotelRating) {
 		return new ResponseEntity<>(manageHotelService.checkHotelsAvailableRooms(roomType, hotelRating), HttpStatus.OK);
+	}
+	
+	private void publishHotelEvent(Hotel newHotel, String eventType) {
+		rabbitTemplate.setExchange(exchange);
+		rabbitTemplate.convertAndSend(createRoutingkey,
+				new HotelEventMessage(newHotel.getId(), eventType));
+		rabbitTemplate.convertAndSend(newHotel);
+		
 	}
 }
