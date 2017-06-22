@@ -50,7 +50,7 @@ public class HotelReservation implements Serializable, DomainOperations<HotelRes
     @GeneratedValue
     private Long id;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
     

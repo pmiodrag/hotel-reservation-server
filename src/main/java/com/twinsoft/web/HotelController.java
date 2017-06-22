@@ -29,6 +29,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.twinsoft.domain.Hotel;
 import com.twinsoft.domain.HotelRating;
+import com.twinsoft.domain.HotelRoomType;
 import com.twinsoft.domain.RoomType;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
@@ -136,5 +137,27 @@ public class HotelController {
 	@GetMapping(value="/checkAvailableRooms/{roomType}/{hotelRating}",  produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Map<Hotel, Boolean>> checkHotelAvailableRooms(@PathVariable("roomType") final RoomType roomType, @PathVariable("hotelRating") final HotelRating hotelRating) {
 		return new ResponseEntity<>(manageHotelService.checkHotelsAvailableRooms(roomType, hotelRating), HttpStatus.OK);
+	}
+	
+	/**
+	 * Rest endpoint to check all hotels for available rooms with specified room type and rating.
+	 *
+	 * @param pageable
+	 * @return ResponseEntity<List<Hotel>>
+	 */
+	@GetMapping(value="/summaryHotelsTotalRooms",  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<Hotel, List<HotelRoomType>>> summaryHotelsTotalRooms() {
+		return new ResponseEntity<>(manageHotelService.hotelTotalRooms(), HttpStatus.OK);
+	}
+	
+	/**
+	 * Rest endpoint to check all hotels for available rooms with specified room type and rating.
+	 *
+	 * @param pageable
+	 * @return ResponseEntity<List<Hotel>>
+	 */
+	@GetMapping(value="/summaryAvailableRooms",  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<Hotel, List<HotelRoomType>>> summaryAvailableRooms() {
+		return new ResponseEntity<>(manageHotelService.availableHotelRooms(), HttpStatus.OK);
 	}
 }
