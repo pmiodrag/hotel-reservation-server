@@ -6,13 +6,14 @@ package com.twinsoft.service;
 import java.util.List;
 
 import com.twinsoft.domain.Hotel;
+import com.twinsoft.util.caching.HotelCacheServiceBase;
 
 /**
  * HotelService interface
  *
  * @author Miodrag Pavkovic
  */
-public interface HotelService {
+public interface HotelService extends HotelCacheServiceBase {
 	
 	/**
 	 * Find specific hotel.

@@ -23,7 +23,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 /**
  * RabbitMQ configuration class
  *
- * @author miodrag
+ * @author Miodrag Pavkovic
  */
 @Configuration
 public class RabbitMqConfig {
