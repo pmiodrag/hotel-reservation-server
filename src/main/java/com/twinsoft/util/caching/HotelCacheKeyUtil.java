@@ -39,13 +39,12 @@ public class HotelCacheKeyUtil {
     }
 
     /**
-     * Create unique key value for asset cacheable beans based on integer value and key type in format: </br>
-     * <b>asset:id|type[stage, runParameter, technicalSpec]</b>
+     * Create unique key value for hotel cacheable beans based on long value </br>
      *
      * @param first
      *            first integer value
      * @param type
-     *            key type can be stage, runParameter or technicalSpec
+     *            key type is hotel
      * @return unique key redis cache
      */
     public static String generateHotelKey(final Long first, final KeyType type) {

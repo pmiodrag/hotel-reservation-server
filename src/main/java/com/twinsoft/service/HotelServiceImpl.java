@@ -91,7 +91,7 @@ public class HotelServiceImpl implements HotelService {
             return Optional.ofNullable(redisTemplate.opsForValue()
                 .get(id));
         } catch (final Exception e) {
-            log.error("Could not retrieve run parameter for asset " + id + " from cache. Cause: ", e);
+            log.error("Could not retrieve run parameter for hotel " + id + " from cache. Cause: ", e);
             return Optional.empty();
         }
     }
