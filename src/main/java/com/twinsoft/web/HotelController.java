@@ -159,25 +159,35 @@ public class HotelController {
 	
 
 	/**
-	 * Rest endpoint to check all hotels for available rooms with specified room type and rating.
+	 * Rest endpoint to get summary of total rooms for hotels.
 	 *
 	 * @param pageable
 	 * @return ResponseEntity<List<Hotel>>
 	 */
 	@GetMapping(value="/summaryHotelsTotalRooms",  produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Map<Hotel, List<HotelRoomType>>> summaryHotelsTotalRooms() {
-		return new ResponseEntity<>(manageHotelService.hotelTotalRooms(), HttpStatus.OK);
+		return new ResponseEntity<>(manageHotelService.summaryHotelsTotalRooms(), HttpStatus.OK);
 	}
 	
 	/**
-	 * Rest endpoint to check all hotels for available rooms with specified room type and rating.
+	 * Rest endpoint to get summary of reserved rooms for hotels.
 	 *
-	 * @param pageable
-	 * @return ResponseEntity<List<Hotel>>
+	 * @return  ResponseEntity<Map<Hotel, List<HotelRoomType>>> 
 	 */
-	@GetMapping(value="/summaryAvailableRooms",  produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<Hotel, List<HotelRoomType>>> summaryAvailableRooms() {
-		return new ResponseEntity<>(manageHotelService.availableHotelRooms(), HttpStatus.OK);
+	@GetMapping(value="/summaryHotelsReservedRooms",  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<Hotel, List<HotelRoomType>>> summaryHotelsReservedRooms() {
+		return new ResponseEntity<>(manageHotelService.summaryHotelsReservedRooms(), HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * Rest endpoint to get summary of all available rooms for hotels.
+	 *
+	 * @return ResponseEntity<Map<Hotel, List<HotelRoomType>>> 
+	 */
+	@GetMapping(value="/summaryHotelsAvailableRooms",  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<Hotel, List<HotelRoomType>>> summaryHotelsAvailableRooms() {
+		return new ResponseEntity<>(manageHotelService.summaryHotelsAvailableRooms(), HttpStatus.OK);
 	}
 	
 	private void publishHotelEvent(Hotel newHotel, String eventType) {
