@@ -1,4 +1,4 @@
-package com.twinsoft.event;
+package com.twinsoft.util.event;
 
 import lombok.Data;
 

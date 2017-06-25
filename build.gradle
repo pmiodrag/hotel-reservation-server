@@ -48,6 +48,7 @@ dependencies {
  	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.1") 
     compile('com.fasterxml.jackson.datatype:jackson-datatype-joda:2.6.3')
     compile("org.springframework.amqp:spring-rabbit")
+    compile("org.springframework.boot:spring-boot-starter-data-redis")
    
     compile('javax.inject:javax.inject:1')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
