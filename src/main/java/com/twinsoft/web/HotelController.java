@@ -48,7 +48,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RestController
-@RequestMapping("hotels")
+@RequestMapping("api/hotels")
 public class HotelController {
 	private static final String RESOURCE_NOT_FOUND_MESSAGE = null;
 	/** The hotel service */
