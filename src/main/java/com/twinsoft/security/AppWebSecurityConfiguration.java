@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
 /**
  * @author Zolt Egete z.egete@levi9.com
  * @since Aug 17, 2015
@@ -22,26 +21,21 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class AppWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("password").roles("USER").and().withUser("admin")
-                .password("password").roles("USER", "ADMIN");
-    }
-    
+	private static final String X_XSRF_TOKEN = "X-XSRF-TOKEN";
+	
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-     http
-        .authorizeRequests()
-            .antMatchers(HttpMethod.OPTIONS).permitAll()
-            .anyRequest().authenticated()
-            .and().httpBasic()
-            .and().csrf().disable();
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("admin").password("adminpassword").roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("user").password("userpassword").roles("USER");
     }
-    
+
     @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    protected void configure(final HttpSecurity http) throws Exception {
+    	 http.authorizeRequests().antMatchers("**/oauth/token").permitAll()
+         .and().authorizeRequests().anyRequest().authenticated()
+         .and().httpBasic()
+         .and().csrf().disable()
+         .logout().permitAll();
     }
         
 }

@@ -1,5 +1,6 @@
 package com.twinsoft.security;
 
+import java.security.KeyPair;
 import java.util.Arrays;
 
 import javax.inject.Inject;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -22,6 +24,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 
 /**
@@ -30,90 +33,57 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 @EnableAuthorizationServer
 public class AppOAuth2ServerConfiguration extends AuthorizationServerConfigurerAdapter { 
-	@Value("${resource.id:spring-boot-application}")
-    private String resourceId;
-    
-    @Value("${access_token.validity_period:3600}")
-    int accessTokenValiditySeconds = 3600;
-
-    @Autowired
+	@Inject
     private AuthenticationManager authenticationManager;
-    
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        return new JwtAccessTokenConverter();
+
+    @Value("${spring.security.client.id}")
+    private String clientId;
+    @Value("${spring.security.client.secret}")
+    private String clientSecret;
+    @Value("${spring.security.client.scope}")
+    private String clientScope;
+    @Value("${spring.security.client.grants}")
+    private String[] grants;
+   /* @Value("${phouse.security.keystore.file}")
+    private String keystoreFile;
+    @Value("${phouse.security.keystore.alias}")
+    private String keystoreAlias;
+    @Value("${phouse.security.keystore.storepass}")
+    private String storepass;
+    @Value("${phouse.security.keystore.keypass}")
+    private String keypass;*/
+
+ /*   @Bean
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(jwtAccessTokenConverter());
+    }*/
+
+   /* @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        final JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        final KeyPair keyPair = new KeyStoreKeyFactory(new ClassPathResource(keystoreFile), storepass.toCharArray())
+            .getKeyPair(keystoreAlias, keypass.toCharArray());
+        jwtAccessTokenConverter.setKeyPair(keyPair);
+
+        return jwtAccessTokenConverter;
+    }
+*/
+    @Override
+    public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {
+        clients
+            .inMemory()
+                .withClient(clientId)
+                .secret(clientSecret)
+                .authorizedGrantTypes(grants)
+                .scopes(clientScope)
+                .autoApprove(true);
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-            .authenticationManager(this.authenticationManager)
-            .accessTokenConverter(accessTokenConverter());
+           // .tokenStore(tokenStore())
+            //.accessTokenConverter(jwtAccessTokenConverter())
+            .authenticationManager(authenticationManager);
     }
-    
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        oauthServer.tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')")
-            .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
-    }
-
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-            .withClient("normal-app")
-                .authorizedGrantTypes("authorization_code", "implicit")
-                .authorities("ROLE_CLIENT")
-                .scopes("read", "write")
-                .resourceIds(resourceId)
-                .accessTokenValiditySeconds(accessTokenValiditySeconds)
-        .and()
-            .withClient("trusted-app")
-                .authorizedGrantTypes("client_credentials", "password")
-                .authorities("ROLE_TRUSTED_CLIENT")
-                .scopes("read", "write")
-                .resourceIds(resourceId)
-                .accessTokenValiditySeconds(accessTokenValiditySeconds)
-                .secret("secret");
-    }
-
-//	@Inject
-//    private AuthenticationManager authenticationManager;
-//	
-//	@Override
-//	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-//	    TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-//	    tokenEnhancerChain.setTokenEnhancers(
-//	      Arrays.asList(tokenEnhancer(), accessTokenConverter()));
-//	 
-//	    endpoints.tokenStore(tokenStore())
-//	             .tokenEnhancer(tokenEnhancerChain)
-//	             .authenticationManager(authenticationManager);
-//	}
-//	
-// 
-//	@Bean
-//	public TokenEnhancer tokenEnhancer() {
-//	    return new CustomTokenEnhancer();
-//	}
-//	
-//    @Bean
-//    public TokenStore tokenStore() {
-//        return new JwtTokenStore(accessTokenConverter());
-//    }
-// 
-//    @Bean
-//    public JwtAccessTokenConverter accessTokenConverter() {
-//        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-//        converter.setSigningKey("123");
-//        return converter;
-//    }
-// 
-//    @Bean
-//    @Primary
-//    public DefaultTokenServices tokenServices() {
-//        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-//        defaultTokenServices.setTokenStore(tokenStore());
-//        defaultTokenServices.setSupportRefreshToken(true);
-//        return defaultTokenServices;
-//    }
 }

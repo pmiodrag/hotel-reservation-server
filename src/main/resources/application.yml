@@ -44,7 +44,12 @@ spring:
       database: 1
       hotel:
         cache-ttl: 1440 # in minutes
-        
+    security:
+      client:
+        id: phfrontend
+        secret: phfrontendpassword
+        scope: phdomain
+        grants: 'password'    
 hotelserver:
   amqp:
     exchange: twinsoft.hotelserver.exchange  
