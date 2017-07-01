@@ -2,8 +2,11 @@ info:
   name: hotel-reservation-server
   description: Hotel resrvation use case application
    
-directory: d:\test
-
+server.contextPath: /auth
+logging:
+ level:
+   org.springframework.security: DEBUG
+   
 server:
   port: ${PORT:9080}
 spring:
