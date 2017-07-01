@@ -49,7 +49,7 @@ dependencies {
     compile('com.fasterxml.jackson.datatype:jackson-datatype-joda:2.6.3')
     compile("org.springframework.amqp:spring-rabbit")
     compile("org.springframework.boot:spring-boot-starter-data-redis")
-   
+   	compile "commons-io:commons-io:2.5"
     compile('javax.inject:javax.inject:1')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
