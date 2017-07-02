@@ -44,13 +44,15 @@ spring:
       database: 1
       hotel:
         cache-ttl: 1440 # in minutes
-      
 hotelserver:
   amqp:
       exchange: twinsoft.hotelserver.exchange  
       queue: twinsoft.hotelserver.hotel.queue
       routing-key: twinsoft.hotelserver.hotel.key 
   security:
+      oauth2:
+        resource:
+          id: oauth2_id
       client:
         id: phfrontend
         secret: phfrontendpassword
