@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import javax.persistence.TransactionRequiredException;
 import javax.validation.Valid;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,8 +29,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.twinsoft.domain.Hotel;
 import com.twinsoft.domain.HotelReservation;
 import com.twinsoft.service.HotelReservationService;
+import com.twinsoft.service.HotelService;
+import com.twinsoft.util.event.EventType;
+import com.twinsoft.util.event.HotelEventMessage;
+import com.twinsoft.util.event.HotelReservationEventMessage;
 import com.twinsoft.util.exception.DeleteEntityException;
 import com.twinsoft.util.exception.PersistEntityException;
 import com.twinsoft.util.exception.ResourceNotFoundException;
@@ -46,10 +53,24 @@ public class HotelReservationController {
 	private static final String RESOURCE_NOT_FOUND_MESSAGE = null;
 	/** The hotel service */
 	private final HotelReservationService hotelReservationService;
+	
+	private final HotelService hotelService;
+	
+	 /** The RabbitMQ template */
+	private final RabbitTemplate rabbitTemplate;
+		
+	@Value("${hotelserver.amqp.exchange}")
+	private String exchange;
+
+	/** The contract createed routing key */
+	@Value("${hotelserver.amqp.routing-key}")
+	private String hotelRoutingkey;
 
 	@Inject
-	public HotelReservationController(final HotelReservationService hotelReservationService) {
+	public HotelReservationController(final HotelReservationService hotelReservationService, final HotelService hotelService, final RabbitTemplate rabbitTemplate) {
 		this.hotelReservationService = hotelReservationService;
+		this.hotelService = hotelService;
+		this.rabbitTemplate = rabbitTemplate;
 	}
 	
 
@@ -75,6 +96,7 @@ public class HotelReservationController {
 	public HttpHeaders create(@Valid @RequestBody final HotelReservation hotelReservation, final UriComponentsBuilder builder) {		
 		try {
 			final HotelReservation newHotelReservation = hotelReservationService.save(hotelReservation);
+			publishHotelReservationEvent(newHotelReservation, EventType.CREATE);
 			final HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.setLocation(builder.path("/hotelreservations/{hotelReservationId}").buildAndExpand(newHotelReservation.getId()).toUri());
 			return httpHeaders;
@@ -115,9 +137,17 @@ public class HotelReservationController {
 				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
 			hotelReservationService.delete(hotelReservation.getId());
+			publishHotelReservationEvent(hotelReservation, EventType.DELETE);
 		} catch (final DataIntegrityViolationException e) {
 			log.error("Exception occurred while deleting hotel reservation with reservation id {}. Cause: ", hotelReservationId, e);
 			throw new DeleteEntityException("deleteError");
 		}
+	}
+	
+	private void publishHotelReservationEvent(HotelReservation reservation, EventType eventType) {
+		rabbitTemplate.setExchange(exchange);
+		final Hotel reservedHotel = hotelService.findByHotelId(reservation.getHotel().getId());
+		rabbitTemplate.convertAndSend(hotelRoutingkey,
+				new HotelReservationEventMessage(reservedHotel.getName(), reservation.getRoomType(), reservation.getStartDate(), reservation.getEndDate(), eventType));
 	}
 }

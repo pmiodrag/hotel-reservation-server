@@ -6,8 +6,8 @@ import lombok.Data;
 public class HotelEventMessage {
 
 	private final Long id;
-	private final String eventType;
-	public HotelEventMessage(Long id, String eventType) {
+	private final EventType eventType;
+	public HotelEventMessage(final Long id, final EventType eventType) {
 		this.id = id;
 		this.eventType = eventType;
 	}

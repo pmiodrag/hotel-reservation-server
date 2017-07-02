@@ -35,6 +35,7 @@ import com.twinsoft.domain.HotelRoomType;
 import com.twinsoft.domain.RoomType;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
+import com.twinsoft.util.event.EventType;
 import com.twinsoft.util.event.HotelEventMessage;
 import com.twinsoft.util.exception.DeleteEntityException;
 import com.twinsoft.util.exception.PersistEntityException;
@@ -64,7 +65,7 @@ public class HotelController {
 
 	/** The contract createed routing key */
 	@Value("${hotelserver.amqp.routing-key}")
-	private String createRoutingkey;
+	private String hotelRoutingkey;
 
 
 
@@ -98,7 +99,7 @@ public class HotelController {
 	public HttpHeaders create(@Valid @RequestBody final Hotel hotel, final UriComponentsBuilder builder) {		
 		try {
 			final Hotel newHotel = hotelService.save(hotel);
-			publishHotelEvent(newHotel, "created");
+			publishHotelEvent(newHotel, EventType.CREATE);
 			
 			final HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.setLocation(builder.path("/hotels/{hotelId}").buildAndExpand(newHotel.getId()).toUri());
@@ -121,6 +122,7 @@ public class HotelController {
 		try {
 			hotel.setId(hotelId);
 			final Hotel updatedHotel = hotelService.save(hotel);
+			publishHotelEvent(updatedHotel, EventType.UPDATE);
 			return new ResponseEntity<>(updatedHotel, HttpStatus.OK);
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
 			log.error("Exception occurred while updating hotel with id {}. Cause: ", hotelId, e);
@@ -140,6 +142,7 @@ public class HotelController {
 				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
 			hotelService.delete(hotel.getId());
+			publishHotelEvent(hotel, EventType.DELETE);
 		} catch (final DataIntegrityViolationException e) {
 			log.error("Exception occurred while deleting meter reading with hotel id {}. Cause: ", hotelId, e);
 			throw new DeleteEntityException("deleteError");
@@ -190,10 +193,9 @@ public class HotelController {
 		return new ResponseEntity<>(manageHotelService.summaryHotelsAvailableRooms(), HttpStatus.OK);
 	}
 	
-	private void publishHotelEvent(Hotel newHotel, String eventType) {
+	private void publishHotelEvent(Hotel newHotel, EventType eventType) {
 		rabbitTemplate.setExchange(exchange);
-		rabbitTemplate.convertAndSend(createRoutingkey,
+		rabbitTemplate.convertAndSend(hotelRoutingkey,
 				new HotelEventMessage(newHotel.getId(), eventType));
-		rabbitTemplate.convertAndSend(newHotel);
 	}
 }
