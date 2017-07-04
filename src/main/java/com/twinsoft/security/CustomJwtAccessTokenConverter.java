@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
  * A custom converter for the access token
  * Used to enhance the access token with additional information
  *
- * Created by z.egete on 18/07/16.
+ * @author Miodrag Pavkovic
  */
 public class CustomJwtAccessTokenConverter extends JwtAccessTokenConverter {
     private static final String TENANT_ID = "tenant_id";

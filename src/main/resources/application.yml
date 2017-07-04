@@ -44,6 +44,8 @@ spring:
       database: 1
       hotel:
         cache-ttl: 1440 # in minutes
+ 
+        
 hotelserver:
   amqp:
       exchange: twinsoft.hotelserver.exchange  
@@ -64,7 +66,7 @@ hotelserver:
         keypass: mypass
       cors:
         allow:
-          origin: '*' #FOR DEVELOPMENT ONLY, CHANGE TO THE LIST OF ALLOWED ORIGINS AS SOON AS POSSIBLE
+          origin: '*' 
           methods: 'POST, GET, OPTIONS, DELETE, PUT'
           headers: 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Origin'
           credentials: tr
