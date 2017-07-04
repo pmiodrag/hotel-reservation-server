@@ -44,9 +44,30 @@ spring:
       database: 1
       hotel:
         cache-ttl: 1440 # in minutes
+ 
         
 hotelserver:
   amqp:
-    exchange: twinsoft.hotelserver.exchange  
-    queue: twinsoft.hotelserver.hotel.queue
-    routing-key: twinsoft.hotelserver.hotel.key  
+      exchange: twinsoft.hotelserver.exchange  
+      queue: twinsoft.hotelserver.hotel.queue
+      routing-key: twinsoft.hotelserver.hotel.key 
+  security:
+      oauth2:
+        resource:
+          id: oauth2_id
+      client:
+        id: phfrontend
+        secret: phfrontendpassword
+        scope: phdomain
+      keystore:
+        file: mytest.jks
+        alias: mytest
+        storepass: mypass
+        keypass: mypass
+      cors:
+        allow:
+          origin: '*' 
+          methods: 'POST, GET, OPTIONS, DELETE, PUT'
+          headers: 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Origin'
+          credentials: tr
+  
