@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.twinsoft;
 
 import org.junit.Ignore;
 import org.junit.Test;
