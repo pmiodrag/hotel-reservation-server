@@ -6,6 +6,7 @@ package com.twinsoft.web;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.persistence.TransactionRequiredException;
@@ -33,6 +34,7 @@ import com.twinsoft.domain.Hotel;
 import com.twinsoft.domain.HotelRating;
 import com.twinsoft.domain.HotelRoomType;
 import com.twinsoft.domain.RoomType;
+import com.twinsoft.service.HotelRoomService;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
 import com.twinsoft.util.event.EventType;
@@ -56,6 +58,8 @@ public class HotelController {
 	private final HotelService hotelService;
 	
 	private final ManageHotelService manageHotelService;
+	
+	private final HotelRoomService roomService;
 	 
 	 /** The RabbitMQ template */
 	private final RabbitTemplate rabbitTemplate;
@@ -70,9 +74,10 @@ public class HotelController {
 
 
 	@Inject
-	public HotelController(final HotelService hotelService, final ManageHotelService manageHotelService,  final RabbitTemplate rabbitTemplate) {
+	public HotelController(final HotelService hotelService, final ManageHotelService manageHotelService,  final HotelRoomService roomService, final RabbitTemplate rabbitTemplate) {
 		this.hotelService = hotelService;
 		this.manageHotelService = manageHotelService;
+		this.roomService = roomService;
 		this.rabbitTemplate = rabbitTemplate;
 	}	
 
@@ -98,7 +103,18 @@ public class HotelController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public HttpHeaders create(@Valid @RequestBody final Hotel hotel, final UriComponentsBuilder builder) {		
 		try {
-			final Hotel newHotel = hotelService.save(hotel);
+			final Hotel newHotel = new Hotel();
+			newHotel.builder().name(hotel.getName()).rating(hotel.getRating()).totalRooms(hotel.getTotalRooms()).build();
+			hotelService.save(hotel);
+			
+			final List<HotelRoomType> oldRoomTypes = hotel.getHotelRoomTypes();			
+			oldRoomTypes.stream().forEach(rt -> {
+				final HotelRoomType newRoomType = new HotelRoomType();
+				newRoomType.builder().hotel(newHotel).price(rt.getPrice()).roomType(rt.getRoomType()).build();
+				roomService.save(newRoomType);
+			});
+			
+					
 			publishHotelEvent(newHotel, EventType.CREATE);
 			
 			final HttpHeaders httpHeaders = new HttpHeaders();

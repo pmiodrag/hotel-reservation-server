@@ -1,6 +1,7 @@
 package com.twinsoft.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -59,8 +60,7 @@ private static final long serialVersionUID = 8690390386555199353L;
     
     /** The hotel room types. */
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "hotel", cascade = CascadeType.ALL)
-    @JsonIgnore
     @NotNull
-    private List<HotelRoomType> hotelRoomTypes;
+    private List<HotelRoomType> hotelRoomTypes = new ArrayList<>();
 
 }
