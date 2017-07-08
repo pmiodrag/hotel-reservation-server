@@ -11,6 +11,6 @@ import com.twinsoft.domain.HotelRoomType;
  */
 public interface HotelRoomService {
 
-	void save(HotelRoomType newRoomType);
+	HotelRoomType save(HotelRoomType newRoomType);
 
 }

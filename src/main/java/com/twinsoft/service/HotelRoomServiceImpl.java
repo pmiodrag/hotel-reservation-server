@@ -26,8 +26,8 @@ public class HotelRoomServiceImpl implements HotelRoomService {
 	}
 
 	@Override
-	public void save(HotelRoomType newRoomType) {
-		repository.save(newRoomType);
-		
+	public HotelRoomType save(HotelRoomType newRoomType) {
+		final HotelRoomType hotelRoomType = repository.save(newRoomType);
+		return hotelRoomType;
 	}
 }
