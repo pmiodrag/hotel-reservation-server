@@ -105,7 +105,7 @@ public class HotelController {
 		try {
 			final Hotel newHotel = new Hotel();
 			newHotel.builder().name(hotel.getName()).rating(hotel.getRating()).totalRooms(hotel.getTotalRooms()).build();
-			hotelService.save(hotel);
+			hotelService.save(newHotel);
 			
 			final List<HotelRoomType> oldRoomTypes = hotel.getHotelRoomTypes();			
 			oldRoomTypes.stream().forEach(rt -> {
