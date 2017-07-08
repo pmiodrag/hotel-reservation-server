@@ -3,6 +3,7 @@
  */
 package com.twinsoft.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -103,18 +104,17 @@ public class HotelController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public HttpHeaders create(@Valid @RequestBody final Hotel hotel, final UriComponentsBuilder builder) {		
 		try {
-			final Hotel newHotel = new Hotel();
-			newHotel.builder().name(hotel.getName()).rating(hotel.getRating()).totalRooms(hotel.getTotalRooms()).build();
+			final Hotel newHotel = Hotel.builder().name(hotel.getName()).rating(hotel.getRating()).totalRooms(hotel.getTotalRooms()).build();
 			hotelService.save(newHotel);
 			
-			final List<HotelRoomType> oldRoomTypes = hotel.getHotelRoomTypes();			
+			final List<HotelRoomType> oldRoomTypes = hotel.getHotelRoomTypes();		
+			final List<HotelRoomType> newRoomTypes = new ArrayList<>();
 			oldRoomTypes.stream().forEach(rt -> {
-				final HotelRoomType newRoomType = new HotelRoomType();
-				newRoomType.builder().hotel(newHotel).price(rt.getPrice()).roomType(rt.getRoomType()).build();
+				final HotelRoomType newRoomType = HotelRoomType.builder().hotel(newHotel).price(rt.getPrice()).roomType(rt.getRoomType()).build();
 				roomService.save(newRoomType);
+				newRoomTypes.add(newRoomType);
 			});
-			
-					
+			newHotel.setHotelRoomTypes(newRoomTypes);		
 			publishHotelEvent(newHotel, EventType.CREATE);
 			
 			final HttpHeaders httpHeaders = new HttpHeaders();

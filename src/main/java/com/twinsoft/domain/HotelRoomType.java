@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -42,6 +43,7 @@ public class HotelRoomType implements Serializable {
     /** The hotel. */
 	@ManyToOne(optional = false)
     @JoinColumn(name = "hotel_id")
+	@JsonIgnore
     private Hotel hotel;
     
     /** The room type. */

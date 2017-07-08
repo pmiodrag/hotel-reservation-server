@@ -60,7 +60,6 @@ private static final long serialVersionUID = 8690390386555199353L;
     
     /** The hotel room types. */
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "hotel", cascade = CascadeType.ALL)
-    @NotNull
     private List<HotelRoomType> hotelRoomTypes = new ArrayList<>();
 
 }
