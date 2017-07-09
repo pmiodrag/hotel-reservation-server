@@ -106,9 +106,9 @@ public class HotelController {
 		try {
 			final Hotel newHotel = Hotel.builder().name(hotel.getName()).rating(hotel.getRating()).totalRooms(hotel.getTotalRooms()).build();
 			hotelService.save(newHotel);
-			
 			final List<HotelRoomType> oldRoomTypes = hotel.getHotelRoomTypes();		
-			final List<HotelRoomType> newRoomTypes = new ArrayList<>();
+			// We only have data for price and room type  and need to set hotel property for HotelRoomType.			
+			final List<HotelRoomType> newRoomTypes = new ArrayList<HotelRoomType>();
 			oldRoomTypes.stream().forEach(rt -> {
 				final HotelRoomType newRoomType = HotelRoomType.builder().hotel(newHotel).price(rt.getPrice()).roomType(rt.getRoomType()).build();
 				roomService.save(newRoomType);
@@ -134,10 +134,25 @@ public class HotelController {
 	 * @return esponseEntity<Hotel>
 	 */
 	@PutMapping(value="/{hotelId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Hotel> update(@PathVariable final Long hotelId, @Valid @RequestBody final Hotel hotel) {		
+	public ResponseEntity<Hotel> update(@PathVariable final Long hotelId, @Valid @RequestBody final Hotel hotel) {	
+
+		
+		
+		Optional.ofNullable(hotelService.findByHotelId(hotelId))
+				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
-			hotel.setId(hotelId);
-			final Hotel updatedHotel = hotelService.save(hotel);
+			final Hotel updateHotel = Hotel.builder().id(hotelId).name(hotel.getName()).rating(hotel.getRating()).totalRooms(hotel.getTotalRooms()).build();
+//			hotel.setId(hotelId);
+			final Hotel updatedHotel = hotelService.save(updateHotel);
+			final List<HotelRoomType> oldRoomTypes = hotel.getHotelRoomTypes();		
+			// We only have data for price and room type  and need to set hotel property for HotelRoomType.			
+			final List<HotelRoomType> newRoomTypes = new ArrayList<HotelRoomType>();
+			oldRoomTypes.stream().forEach(rt -> {
+				final HotelRoomType newRoomType = HotelRoomType.builder().hotel(updatedHotel).price(rt.getPrice()).roomType(rt.getRoomType()).build();
+				roomService.save(newRoomType);
+				newRoomTypes.add(newRoomType);
+			});
+			updatedHotel.setHotelRoomTypes(newRoomTypes);		
 			publishHotelEvent(updatedHotel, EventType.UPDATE);
 			return new ResponseEntity<>(updatedHotel, HttpStatus.OK);
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
