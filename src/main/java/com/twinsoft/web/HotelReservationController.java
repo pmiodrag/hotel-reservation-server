@@ -63,8 +63,8 @@ public class HotelReservationController {
 	private String exchange;
 
 	/** The contract createed routing key */
-	@Value("${hotelserver.amqp.routing-key}")
-	private String hotelRoutingkey;
+	@Value("${hotelserver.amqp.hotel-reservation-routing-key}")
+    private String hotelReservationRequestRoutingKey;
 
 	@Inject
 	public HotelReservationController(final HotelReservationService hotelReservationService, final HotelService hotelService, final RabbitTemplate rabbitTemplate) {
@@ -147,7 +147,7 @@ public class HotelReservationController {
 	private void publishHotelReservationEvent(HotelReservation reservation, EventType eventType) {
 		rabbitTemplate.setExchange(exchange);
 		final Hotel reservedHotel = hotelService.findByHotelId(reservation.getHotel().getId());
-		rabbitTemplate.convertAndSend(hotelRoutingkey,
+		rabbitTemplate.convertAndSend(hotelReservationRequestRoutingKey,
 				new HotelReservationEventMessage(reservedHotel.getName(), reservation.getRoomType(), reservation.getStartDate(), reservation.getEndDate(), eventType));
 	}
 }

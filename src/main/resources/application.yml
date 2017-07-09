@@ -49,8 +49,10 @@ spring:
 hotelserver:
   amqp:
       exchange: twinsoft.hotelserver.exchange  
-      queue: twinsoft.hotelserver.hotel.queue
-      routing-key: twinsoft.hotelserver.hotel.key 
+      hotel-queue: twinsoft.hotelserver.hotel.queue
+      hotel-reservation-queue: twinsoft.hotelserver.hotel.reservation.queue 
+      hotel-routing-key: twinsoft.hotelserver.hotel.key 
+      hotel-reservation-routing-key: twinsoft.hotelserver.hotel.reservation.key 
   security:
       oauth2:
         resource:

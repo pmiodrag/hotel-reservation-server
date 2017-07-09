@@ -69,8 +69,8 @@ public class HotelController {
 	private String exchange;
 
 	/** The contract createed routing key */
-	@Value("${hotelserver.amqp.routing-key}")
-	private String hotelRoutingkey;
+	@Value("${hotelserver.amqp.hotel-routing-key}")
+    private String hotelRequestRoutingKey;
 
 
 
@@ -211,7 +211,7 @@ public class HotelController {
 	
 	private void publishHotelEvent(Hotel newHotel, EventType eventType) {
 		rabbitTemplate.setExchange(exchange);
-		rabbitTemplate.convertAndSend(hotelRoutingkey,
+		rabbitTemplate.convertAndSend(hotelRequestRoutingKey,
 				new HotelEventMessage(newHotel.getId(), eventType));
 	}
 }

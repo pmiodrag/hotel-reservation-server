@@ -32,27 +32,45 @@ public class RabbitMqConfig {
 	@Value("${hotelserver.amqp.exchange}")
     private String exchange;
 
-    @Value("${hotelserver.amqp.queue}")
-    private String queue;
+    @Value("${hotelserver.amqp.hotel-queue}")
+    private String hotelQueue;
     
-    @Value("${hotelserver.amqp.routing-key}")
+    @Value("${hotelserver.amqp.hotel-routing-key}")
     private String hotelRequestRoutingKey;
+    
+    @Value("${hotelserver.amqp.hotel-reservation-queue}")
+    private String reservationQueue;
+    
+    @Value("${hotelserver.amqp.hotel-reservation-routing-key}")
+    private String hotelReservationRequestRoutingKey;
 
     @Bean
     public TopicExchange topicExchange() {
         return new TopicExchange(exchange);
     }
 
-    @Bean(name = "eventQueue")
-    public Queue eventQueue() {
-        return new Queue(queue);
+    @Bean(name = "hotelEventQueue")
+    public Queue hotelEventQueue() {
+        return new Queue(hotelQueue);
     }
 
-    @Bean(name = "variableRequestEventBinding")
-    public Binding variableRequestEventBinding() {
-        return BindingBuilder.bind(eventQueue())
+    @Bean(name = "hotelRequestEventBinding")
+    public Binding hotelRequestEventBinding() {
+        return BindingBuilder.bind(hotelEventQueue())
                 .to(topicExchange())
                 .with(hotelRequestRoutingKey);
+    }
+    
+    @Bean(name = "reservationEventQueue")
+    public Queue reservationEventQueue() {
+        return new Queue(reservationQueue);
+    }
+
+    @Bean(name = "reservationRequestEventBinding")
+    public Binding reservationRequestEventBinding() {
+        return BindingBuilder.bind(reservationEventQueue())
+                .to(topicExchange())
+                .with(hotelReservationRequestRoutingKey);
     }
 
     @Bean(name = "eventMessageConverter")
