@@ -121,8 +121,8 @@ public class HotelControllerTest extends AbstractRestControllerTest {
 		when(roomService.save(newHotelRoomType)).thenReturn(savedHotelRoomType);
 		updatedHotel.setHotelRoomTypes(Lists.newArrayList(savedHotelRoomType));
         mockMvc.perform(put("/api/hotels/{hotelId}", hotelId)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updateHotel))
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(convertObjectToJsonBytes(updateHotel))
         )
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isOk());
