@@ -10,25 +10,23 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -40,9 +38,7 @@ import com.twinsoft.domain.HotelReservation;
 import com.twinsoft.domain.HotelRoomType;
 import com.twinsoft.domain.RoomType;
 import com.twinsoft.service.HotelReservationService;
-import com.twinsoft.service.HotelRoomService;
 import com.twinsoft.service.HotelService;
-import com.twinsoft.service.ManageHotelService;
 
 /**
  * @author Miodrag Pavkovic
@@ -132,7 +128,7 @@ public class HotelreservationControllerTest extends AbstractRestControllerTest {
 				.reservationPrice(BigDecimal.valueOf(1000.00))
 				.build();
         when(hotelReservationService.save(hotelReservation)).thenReturn(savedHotelReservation);
-        
+        when(hotelService.findByHotelId(any(Long.class))).thenReturn(hotel);
 
         mockMvc.perform(post("/api/hotelreservations")
                 .contentType(APPLICATION_JSON_UTF8)
@@ -140,7 +136,7 @@ public class HotelreservationControllerTest extends AbstractRestControllerTest {
         )
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isCreated());
-                
+               
     	verify(hotelReservationService, times(1)).save(hotelReservation);
 //    	verifyNoMoreInteractions(hotelReservationService);
     }
