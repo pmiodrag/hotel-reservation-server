@@ -10,6 +10,8 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import javax.inject.Inject;
+
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,7 @@ import org.springframework.http.MediaType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.twinsoft.service.HotelReservationService;
 import com.twinsoft.service.HotelRoomService;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
@@ -39,6 +42,13 @@ public abstract class AbstractRestControllerTest {
 			return mock(HotelService.class);
 		}
 
+		/**
+		 * @return HotelReservationService mock
+		 */
+		@Bean
+		public HotelReservationService hotelReservationService() {
+			return mock(HotelReservationService.class);
+		}
 		/**
 		 * @return ManageHotelService mock
 		 */
@@ -66,6 +76,12 @@ public abstract class AbstractRestControllerTest {
 		@Bean
 		public HotelController hotelController() {
 			return new HotelController(hotelService(), manageHotelService(), hotelRoomService(), rabbitTemplate());
+		}
+		
+		@Bean
+		public HotelReservationController hotelReservationController () {
+			return new HotelReservationController(hotelReservationService(),
+				hotelService(), rabbitTemplate());					
 		}
 
 	}

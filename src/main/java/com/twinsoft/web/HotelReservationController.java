@@ -42,8 +42,10 @@ import com.twinsoft.util.exception.ResourceNotFoundException;
 import com.twinsoft.util.exception.UpdateEntityException;
 
 import lombok.extern.slf4j.Slf4j;
+
 /**
  * Rest controller for exposing hotel reservation endpoints.
+ * 
  * @author miodrag
  */
 @Slf4j
@@ -53,26 +55,26 @@ public class HotelReservationController {
 	private static final String RESOURCE_NOT_FOUND_MESSAGE = null;
 	/** The hotel service */
 	private final HotelReservationService hotelReservationService;
-	
+
 	private final HotelService hotelService;
-	
-	 /** The RabbitMQ template */
+
+	/** The RabbitMQ template */
 	private final RabbitTemplate rabbitTemplate;
-		
+
 	@Value("${hotelserver.amqp.exchange}")
 	private String exchange;
 
 	/** The contract createed routing key */
 	@Value("${hotelserver.amqp.hotel-reservation-routing-key}")
-    private String hotelReservationRequestRoutingKey;
+	private String hotelReservationRequestRoutingKey;
 
 	@Inject
-	public HotelReservationController(final HotelReservationService hotelReservationService, final HotelService hotelService, final RabbitTemplate rabbitTemplate) {
+	public HotelReservationController(final HotelReservationService hotelReservationService,
+			final HotelService hotelService, final RabbitTemplate rabbitTemplate) {
 		this.hotelReservationService = hotelReservationService;
 		this.hotelService = hotelService;
 		this.rabbitTemplate = rabbitTemplate;
 	}
-	
 
 	/**
 	 * Rest endpoint for retrieving all hotel reservations.
@@ -83,7 +85,7 @@ public class HotelReservationController {
 	public ResponseEntity<List<HotelReservation>> findAll() {
 		return new ResponseEntity<>(hotelReservationService.findAll(), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Rest endpoint for creating and saving hotel reservation.
 	 * 
@@ -93,18 +95,19 @@ public class HotelReservationController {
 	 */
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public HttpHeaders create(@Valid @RequestBody final HotelReservation hotelReservation, final UriComponentsBuilder builder) {		
+	public HttpHeaders create(@Valid @RequestBody final HotelReservation hotelReservation,
+			final UriComponentsBuilder builder) {
 		try {
 			final HotelReservation newHotelReservation = hotelReservationService.save(hotelReservation);
 			publishHotelReservationEvent(newHotelReservation, EventType.CREATE);
 			final HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setLocation(builder.path("/hotelreservations/{hotelReservationId}").buildAndExpand(newHotelReservation.getId()).toUri());
+			httpHeaders.setLocation(builder.path("/hotelreservations/{hotelReservationId}")
+					.buildAndExpand(newHotelReservation.getId()).toUri());
 			return httpHeaders;
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
 			throw new PersistEntityException("createMeterReadingError");
 		}
 	}
-	
 
 	/**
 	 * Rest endpoint for updating a hotel reservation with reservation id.
@@ -113,17 +116,21 @@ public class HotelReservationController {
 	 * @param hotelReservation
 	 * @return
 	 */
-	@PutMapping(value="/{hotelReservationId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<HotelReservation> update(@PathVariable final Long hotelReservationId, @Valid @RequestBody final HotelReservation hotelReservation) {		
+	@PutMapping(value = "/{hotelReservationId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<HotelReservation> update(@PathVariable final Long hotelReservationId,
+			@Valid @RequestBody final HotelReservation hotelReservation) {
+		Optional.ofNullable(hotelService.findByHotelId(hotelReservationId))
+				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
 			hotelReservation.setId(hotelReservationId);
-			final HotelReservation updateHotelReservation  = hotelReservationService.save(hotelReservation);
+			final HotelReservation updateHotelReservation = hotelReservationService.save(hotelReservation);
 			return new ResponseEntity<>(updateHotelReservation, HttpStatus.OK);
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
 			log.error("Exception occurred while updating hotel reservation with id {}. Cause: ", hotelReservationId, e);
 			throw new UpdateEntityException();
 		}
 	}
+
 	/**
 	 * Rest endpoint for deleting a hotel reservation with reservation id.
 	 *
@@ -136,18 +143,20 @@ public class HotelReservationController {
 				.ofNullable(hotelReservationService.findByHoteReservationlId(hotelReservationId))
 				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
-			hotelReservationService.delete(hotelReservation.getId());
+			hotelReservationService.delete(hotelReservationId);
 			publishHotelReservationEvent(hotelReservation, EventType.DELETE);
 		} catch (final DataIntegrityViolationException e) {
-			log.error("Exception occurred while deleting hotel reservation with reservation id {}. Cause: ", hotelReservationId, e);
+			log.error("Exception occurred while deleting hotel reservation with reservation id {}. Cause: ",
+					hotelReservationId, e);
 			throw new DeleteEntityException("deleteError");
 		}
 	}
-	
+
 	private void publishHotelReservationEvent(HotelReservation reservation, EventType eventType) {
 		rabbitTemplate.setExchange(exchange);
 		final Hotel reservedHotel = hotelService.findByHotelId(reservation.getHotel().getId());
 		rabbitTemplate.convertAndSend(hotelReservationRequestRoutingKey,
-				new HotelReservationEventMessage(reservedHotel.getName(), reservation.getRoomType(), reservation.getStartDate(), reservation.getEndDate(), eventType));
+				new HotelReservationEventMessage(reservedHotel.getName(), reservation.getRoomType(),
+						reservation.getStartDate(), reservation.getEndDate(), eventType));
 	}
 }
