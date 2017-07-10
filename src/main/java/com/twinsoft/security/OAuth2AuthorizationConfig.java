@@ -96,7 +96,7 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 				.refreshTokenValiditySeconds(refreshTokenValiditySeconds).secret("secret");
 	}
 
-	// To provide the JWT, we’ll need to create a JwtTokenStore, a
+	// To provide the JWT, we'll need to create a JwtTokenStore, a
 	// JwtAccessTokenConverter and a DefaultTokenServices bean, and wire all
 	// that to the AuthorizationServerEndpointsConfigurer.
 	@Bean
@@ -106,7 +106,7 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
 	/**
 	 * 
-	 * Using a symmetric key in the JwtAccessTokenConverter isn’t the best approach for a production environment. We use
+	 * Using a symmetric key in the JwtAccessTokenConverter isn't the best approach for a production environment. We use
 	 * an asymmetric key to sign the converter.
 	 * 
 	 * @return JwtAccessTokenConverter

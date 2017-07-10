@@ -52,8 +52,7 @@ dependencies {
    	compile "commons-io:commons-io:2.5"
     compile('javax.inject:javax.inject:1')
     compile('com.google.guava:guava:19.0')
- 	compile 'io.jsonwebtoken:jjwt:0.7.0'
- 	compile 'com.jayway.jsonpath:2.4.0'
+ 	compile 'com.jayway.jsonpath:json-path:2.4.0'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile("org.springframework.restdocs:spring-restdocs-mockmvc")
 }

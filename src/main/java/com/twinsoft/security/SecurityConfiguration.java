@@ -11,8 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
- * The adapter provides some configuration methods that can be customized through overriding., we’ll use
- * our WebSecurityConfigurerAdapter to turn “off” the default security options and to configure users and an
+ * The adapter provides some configuration methods that can be customized through overriding., we will use
+ * our WebSecurityConfigurerAdapter to turn off the default security options and to configure users and an
  * authentication process. It is also important to pay attention to the adapter filtering order. On Spring, the filter
  * with the greatest value takes precedence over the lowest ones. On Spring Boot 1.5.+, the default order of the adapter
  * is 100, but you can change it using the @Order annotation.
