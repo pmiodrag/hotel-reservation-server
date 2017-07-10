@@ -6,6 +6,7 @@ package com.twinsoft.web;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -13,6 +14,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.SpringDataWebConfiguration;
+import org.springframework.http.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,6 +70,9 @@ public abstract class AbstractRestControllerTest {
 
 	}
 
+	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
+			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+	
 	/**
 	 * Convert object to json bytes.
 	 *
