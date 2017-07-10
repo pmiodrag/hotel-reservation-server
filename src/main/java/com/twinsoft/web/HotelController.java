@@ -35,7 +35,7 @@ import com.twinsoft.domain.Hotel;
 import com.twinsoft.domain.HotelRating;
 import com.twinsoft.domain.HotelRoomType;
 import com.twinsoft.domain.RoomType;
-import com.twinsoft.service.HotelRoomService;
+import com.twinsoft.service.HotelRoomTypeService;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
 import com.twinsoft.util.event.EventType;
@@ -60,7 +60,7 @@ public class HotelController {
 	
 	private final ManageHotelService manageHotelService;
 	
-	private final HotelRoomService roomService;
+	private final HotelRoomTypeService roomService;
 	 
 	 /** The RabbitMQ template */
 	private final RabbitTemplate rabbitTemplate;
@@ -75,7 +75,7 @@ public class HotelController {
 
 
 	@Inject
-	public HotelController(final HotelService hotelService, final ManageHotelService manageHotelService,  final HotelRoomService roomService, final RabbitTemplate rabbitTemplate) {
+	public HotelController(final HotelService hotelService, final ManageHotelService manageHotelService,  final HotelRoomTypeService roomService, final RabbitTemplate rabbitTemplate) {
 		this.hotelService = hotelService;
 		this.manageHotelService = manageHotelService;
 		this.roomService = roomService;

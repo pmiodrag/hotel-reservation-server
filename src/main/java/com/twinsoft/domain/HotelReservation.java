@@ -29,8 +29,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * @author miodrag
- *
+ * HotelREeservation domain class.The hotel reservation must have the following definitions : 
+ * - Hotel Id 
+ * - Hotel room type 
+ * - Reservation start and end date 
+ * - Reservation price calculated by date of reservation
+ * 
+ * @author Miodrag Pavkovic
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
@@ -39,37 +44,36 @@ import lombok.NoArgsConstructor;
 @Entity
 @EqualsAndHashCode(callSuper = false)
 @Builder
-@NamedQuery(name = "HotelReservation.findAllByStartDateBeforeAndEndDateAfter",
-query = "select hr from HotelReservation hr where hr.startDate < ?1 and hr.endDate > ?1")
-public class HotelReservation implements Serializable, DomainOperations<HotelReservation> {
+@NamedQuery(name = "HotelReservation.findAllByStartDateBeforeAndEndDateAfter", query = "select hr from HotelReservation hr where hr.startDate < ?1 and hr.endDate > ?1")
+public class HotelReservation implements Serializable {
 
 	private static final long serialVersionUID = 2117514065166401617L;
 
 	/** The hotel reservation id. */
-    @Id
-    @GeneratedValue
-    private Long id;
-    
-    @ManyToOne
-    @JoinColumn(name = "hotel_id")
-    private Hotel hotel;
-    
-    /** Hotel room type. */
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private RoomType roomType;
-    
-    /** Reservation start date */
-    @NotNull
-    private LocalDate startDate;
-    
-    /** Reservation end date */
-    @NotNull
-    private LocalDate endDate;
-    
-    /** Reservation price calculated by date of reservation. */
-    @NotNull
-    @Min(value = 0, message = "priceCannotBeLessThanZero")
-    private BigDecimal reservationPrice;
-    
+	@Id
+	@GeneratedValue
+	private Long id;
+
+	@ManyToOne
+	@JoinColumn(name = "hotel_id")
+	private Hotel hotel;
+
+	/** Hotel room type. */
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private RoomType roomType;
+
+	/** Reservation start date */
+	@NotNull
+	private LocalDate startDate;
+
+	/** Reservation end date */
+	@NotNull
+	private LocalDate endDate;
+
+	/** Reservation price calculated by date of reservation. */
+	@NotNull
+	@Min(value = 0, message = "priceCannotBeLessThanZero")
+	private BigDecimal reservationPrice;
+
 }

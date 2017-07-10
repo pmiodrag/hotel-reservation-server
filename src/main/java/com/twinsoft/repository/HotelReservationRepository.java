@@ -13,8 +13,9 @@ import org.springframework.stereotype.Repository;
 import com.twinsoft.domain.HotelReservation;
 
 /**
- * @author miodrag
- *
+ * The HotelReservation repository
+ * 
+ * @author Miodrag Pavkovic
  */
 @Repository
 public interface HotelReservationRepository extends CrudRepository<HotelReservation, Long> {

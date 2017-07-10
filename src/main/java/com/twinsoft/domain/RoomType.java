@@ -1,7 +1,7 @@
 package com.twinsoft.domain;
 
 /**
- * Represent room type.
+ * Represent room type. It can be single or double room type.
  * @author Miodrag Pavkovic
  */
 public enum RoomType {

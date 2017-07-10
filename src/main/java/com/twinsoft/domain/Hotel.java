@@ -26,8 +26,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * @author miodrag
+ * Hotel domain class. The hotels must have the following definitions :
+ *  - Hotel Stars (how many stars the hotel has, 1 to 5) 
+ *  - Hotel total rooms 
+ *  - Hotel rooms types (single, double)
  *
+ * @author Miodrag Pavkovic
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
@@ -38,28 +42,28 @@ import lombok.ToString;
 @Builder
 @ToString(exclude = "hotelRoomTypes")
 public class Hotel implements Serializable, HotelCacheableBase {
-	
-private static final long serialVersionUID = 8690390386555199353L;
-    
-    /** The hotel id. */
-    @Id
-    @GeneratedValue
-    private Long id;
-    
-    @NotNull
-    private String name;
-    
-    /** Number of rooms **/
-    @NotNull
-    private Integer totalRooms;
-    
-    /** Hotel rating - stars **/
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private HotelRating rating;
-    
-    /** The hotel room types. */
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "hotel", cascade = CascadeType.ALL)
-    private List<HotelRoomType> hotelRoomTypes = new ArrayList<>();
+
+	private static final long serialVersionUID = 8690390386555199353L;
+
+	/** The hotel id. */
+	@Id
+	@GeneratedValue
+	private Long id;
+
+	@NotNull
+	private String name;
+
+	/** Number of rooms **/
+	@NotNull
+	private Integer totalRooms;
+
+	/** Hotel rating - stars **/
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private HotelRating rating;
+
+	/** The hotel room types. */
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "hotel", cascade = CascadeType.ALL)
+	private List<HotelRoomType> hotelRoomTypes = new ArrayList<>();
 
 }

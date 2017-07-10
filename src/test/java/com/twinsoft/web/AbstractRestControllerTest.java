@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.twinsoft.service.HotelReservationService;
-import com.twinsoft.service.HotelRoomService;
+import com.twinsoft.service.HotelRoomTypeService;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
 
@@ -61,8 +61,8 @@ public abstract class AbstractRestControllerTest {
 		 * @return HotelRoomService mock
 		 */
 		@Bean
-		public HotelRoomService hotelRoomService() {
-			return mock(HotelRoomService.class);
+		public HotelRoomTypeService hotelRoomService() {
+			return mock(HotelRoomTypeService.class);
 		}
 
 		/**

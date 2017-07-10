@@ -40,7 +40,7 @@ import com.twinsoft.domain.HotelReservation;
 import com.twinsoft.domain.HotelRoomType;
 import com.twinsoft.domain.RoomType;
 import com.twinsoft.service.HotelReservationService;
-import com.twinsoft.service.HotelRoomService;
+import com.twinsoft.service.HotelRoomTypeService;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
 
@@ -141,7 +141,7 @@ public class HotelreservationControllerTest extends AbstractRestControllerTest {
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isCreated());
                 
-    	verify(hotelReservationService, times(1)).save(hotelReservation);
+    	verify(hotelReservationService, times(1)).save(any(HotelReservation.class));
 //    	verifyNoMoreInteractions(hotelReservationService);
     }
 //	

@@ -12,10 +12,9 @@ import org.springframework.stereotype.Repository;
 import com.twinsoft.domain.Hotel;
 
 /**
- * The hotel repository.
- * 
- * @author miodrag
+ * The Hotel repository.
  *
+ * @author Miodrag Pavkovic
  */
 @Repository
 public interface HotelRepository extends CrudRepository<Hotel, Long> {

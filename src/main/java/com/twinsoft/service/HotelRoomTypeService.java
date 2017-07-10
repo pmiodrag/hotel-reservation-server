@@ -1,16 +1,14 @@
-/**
- * 
- */
 package com.twinsoft.service;
 
 import com.twinsoft.domain.HotelRoomType;
 
 /**
- * @author miodrag
+ * The HotelRoomType service.
  *
+ * @author Miodrag Pavkovic
  */
-public interface HotelRoomService {
-
+public interface HotelRoomTypeService { 
+	
 	HotelRoomType save(HotelRoomType newRoomType);
 
 }

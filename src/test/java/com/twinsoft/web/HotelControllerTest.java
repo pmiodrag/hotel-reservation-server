@@ -36,7 +36,7 @@ import com.twinsoft.domain.Hotel;
 import com.twinsoft.domain.HotelRating;
 import com.twinsoft.domain.HotelRoomType;
 import com.twinsoft.domain.RoomType;
-import com.twinsoft.service.HotelRoomService;
+import com.twinsoft.service.HotelRoomTypeService;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
 
@@ -53,7 +53,7 @@ public class HotelControllerTest extends AbstractRestControllerTest {
 	@Inject
 	private HotelService hotelService;
 	@Inject
-	private HotelRoomService roomService;
+	private HotelRoomTypeService roomService;
 	@Inject
 	private ManageHotelService manageHotelService;
 	

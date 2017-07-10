@@ -6,6 +6,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 
+/**
+ * Application entry point.
+ * 
+ * @author Miodrag Pavkovic
+ */
 @SpringBootApplication
 public class HotelReservationServerApplication extends SpringBootServletInitializer {
 	

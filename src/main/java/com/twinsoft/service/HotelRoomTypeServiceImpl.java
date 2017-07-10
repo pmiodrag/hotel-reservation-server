@@ -5,23 +5,23 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.twinsoft.domain.HotelRoomType;
-import com.twinsoft.repository.HotelRoomRepository;
+import com.twinsoft.repository.HotelRoomTypeRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * HotelRoomService implementation.
+ * HotelRoomTypeService implementation.
  * 
- * @author miodrag
+ * @author Miodrag Pavkovic
  */
-@Service("HotelRoomService")
+@Service("HotelRoomTypeService")
 @Slf4j
-public class HotelRoomServiceImpl implements HotelRoomService {
+public class HotelRoomTypeServiceImpl implements HotelRoomTypeService {
 	
-	private HotelRoomRepository repository;
+	private HotelRoomTypeRepository repository;
 	
 	@Inject
-	public HotelRoomServiceImpl(final HotelRoomRepository repository){
+	public HotelRoomTypeServiceImpl(final HotelRoomTypeRepository repository){
 		this.repository = repository;
 	}
 

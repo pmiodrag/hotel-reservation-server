@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.twinsoft.service;
 
 import java.util.List;
