@@ -5,14 +5,15 @@ package com.twinsoft.web;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,22 +21,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.TransactionRequiredException;
-import javax.validation.Valid;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.google.common.collect.Lists;
 import com.twinsoft.domain.Hotel;
@@ -45,8 +39,6 @@ import com.twinsoft.domain.RoomType;
 import com.twinsoft.service.HotelRoomService;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
-import com.twinsoft.util.event.EventType;
-import com.twinsoft.util.exception.UpdateEntityException;
 
 /**
  * @author Miodrag Pavkovic
@@ -151,19 +143,21 @@ public class HotelControllerTest extends AbstractRestControllerTest {
 //		throw new UpdateEntityException();
 //	}
 	}
-	/**
-	 * @return
-	 */
-	private List<HotelRoomType> getHotelRoomTypes() {
-		return Lists.newArrayList(createHotelRoomType());
-	}
 	
-	/**
-	 * @return
-	 */
-	private HotelRoomType createHotelRoomType() {
-		return new HotelRoomType(1L, new Hotel(), RoomType.SINGLE, BigDecimal.valueOf(100.00));
-	}
+	@Test
+    public void testDeleteHotel() throws Exception {
+		final Long hotelId = 1L;
+		final Hotel hotel = Hotel.builder().id(1L).name("Rossa De Mar").rating( HotelRating.THREE_STAR).totalRooms(Integer.valueOf(2)).build();
+        when(hotelService.findByHotelId(any(Long.class))).thenReturn(hotel);
+        
+		mockMvc.perform(delete("/api/hotels/{hotelId}", hotelId).contentType(MediaType.APPLICATION_JSON)
+			.content(convertObjectToJsonBytes(hotel)))
+            .andExpect(status().isNoContent());
+            
+		verify(hotelService).delete(any(Long.class));
+       
+    }
+	
 
 
 }
