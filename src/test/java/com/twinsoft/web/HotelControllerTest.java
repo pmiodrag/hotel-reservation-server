@@ -65,7 +65,7 @@ public class HotelControllerTest extends AbstractRestControllerTest {
 		final Hotel firstHotel = Hotel.builder().id(1L).name("Rossa De Mar").rating( HotelRating.THREE_STAR).totalRooms(Integer.valueOf(2)).build();	
 		final Hotel secondHotel = Hotel.builder().id(2L).name("Rossa De Mar 2").rating( HotelRating.FOUR_STAR).totalRooms(Integer.valueOf(2)).build();
         when(hotelService.findAll()).thenReturn(Lists.newArrayList(firstHotel, secondHotel));
-        mockMvc.perform(get("/api/hotels").accept(TestUtil.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/api/hotels").accept(APPLICATION_JSON_UTF8))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(2)))
         .andExpect(jsonPath("$[0].id", is(1)))
@@ -97,8 +97,8 @@ public class HotelControllerTest extends AbstractRestControllerTest {
 		savedHotel.setHotelRoomTypes(Lists.newArrayList(savedHotelRoomType));
 
         mockMvc.perform(post("/api/hotels")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(hotel))
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(convertObjectToJsonBytes(hotel))
         )
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isCreated());
