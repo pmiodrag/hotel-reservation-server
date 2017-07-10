@@ -35,6 +35,12 @@ public interface HotelService extends HotelCacheServiceBase {
 	Hotel save(Hotel hotel);
 	
 	/**
+	 * Updates hotel.
+	 * @return Hotel entity
+	 */
+	Hotel update(Hotel hotel);
+	
+	/**
 	 * Delete hotel entity.
 	 * @param id to delete hotel entity with requested id
 	 */

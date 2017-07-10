@@ -121,5 +121,10 @@ public class HotelServiceImpl implements HotelService {
             log.error("Hotel  with cache id " + id + " could not be eviced. Cause: ", e);
         }
     }
+
+	@Override
+	public Hotel update(Hotel hotel) {
+		return repository.save(hotel);
+	}
  
 }

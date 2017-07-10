@@ -133,7 +133,7 @@ public class HotelController {
 				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
 			final Hotel updateHotel = Hotel.builder().id(hotelId).name(hotel.getName()).rating(hotel.getRating()).totalRooms(hotel.getTotalRooms()).build();
-			final Hotel updatedHotel = hotelService.save(updateHotel);
+			final Hotel updatedHotel = hotelService.update(updateHotel);
 			final List<HotelRoomType> newRoomTypes = setHotelRoomTypes(hotel.getHotelRoomTypes(), updatedHotel);
 			updatedHotel.setHotelRoomTypes(newRoomTypes);		
 			publishHotelEvent(updatedHotel, EventType.UPDATE);

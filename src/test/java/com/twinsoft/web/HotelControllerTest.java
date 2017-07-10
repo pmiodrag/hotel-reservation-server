@@ -78,7 +78,6 @@ public class HotelControllerTest extends AbstractRestControllerTest {
         .andExpect(jsonPath("$[1].totalRooms", is(2)));     
 
     	verify(hotelService, times(1)).findAll();
-//    	verifyNoMoreInteractions(hotelService);
     }	
 
 	
@@ -104,8 +103,7 @@ public class HotelControllerTest extends AbstractRestControllerTest {
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isCreated());
                 
-    	verify(hotelService, times(1)).save(hotel);
-    	verifyNoMoreInteractions(hotelService);
+    	verify(hotelService, times(1)).save(any(Hotel.class));
     }
 	
 	@Test
@@ -117,38 +115,35 @@ public class HotelControllerTest extends AbstractRestControllerTest {
 		
 		final HotelRoomType newHotelRoomType = HotelRoomType.builder().hotel(updatedHotel).roomType(RoomType.SINGLE).price(BigDecimal.valueOf(100.00)).build();
 		updateHotel.setHotelRoomTypes(Lists.newArrayList(newHotelRoomType));
-		when(hotelService.save(updateHotel)).thenReturn(updatedHotel);
+		when(hotelService.update(any(Hotel.class))).thenReturn(updatedHotel);
 //        // Mock HotelRoomType entity after saving, set id
 		final HotelRoomType savedHotelRoomType = HotelRoomType.builder().id(hotelId).hotel(updatedHotel).roomType(RoomType.SINGLE).price(BigDecimal.valueOf(100.00)).build();
 		when(roomService.save(newHotelRoomType)).thenReturn(savedHotelRoomType);
-//		updatedHotel.setHotelRoomTypes(Lists.newArrayList(savedHotelRoomType));
-////
-//        mockMvc.perform(put("/api/hotels/{hotelId}", hotelId)
-//                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-//                .content(TestUtil.convertObjectToJsonBytes(updateHotel))
-//        )
-//        .andDo(MockMvcResultHandlers.print())
-//        .andExpect(status().isOk());
-//	                
-//    	verify(hotelService, times(1)).save(updateHotel);
-//    	verifyNoMoreInteractions(hotelService);
+		updatedHotel.setHotelRoomTypes(Lists.newArrayList(savedHotelRoomType));
+        mockMvc.perform(put("/api/hotels/{hotelId}", hotelId)
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(updateHotel))
+        )
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(status().isOk());
+	                
+    	verify(hotelService, times(1)).update(any(Hotel.class));
 
 	}
 	
-	@Test
+    @Test
     public void testDeleteHotel() throws Exception {
-		final Long hotelId = 1L;
-		final Hotel hotel = Hotel.builder().id(1L).name("Rossa De Mar").rating( HotelRating.THREE_STAR).totalRooms(Integer.valueOf(2)).build();
+        final Long hotelId = 1L;
+        final Hotel hotel = Hotel.builder().id(1L).name("Rossa De Mar").rating( HotelRating.THREE_STAR).totalRooms(Integer.valueOf(2)).build();
         when(hotelService.findByHotelId(any(Long.class))).thenReturn(hotel);
         
-		mockMvc.perform(delete("/api/hotels/{hotelId}", hotelId).contentType(MediaType.APPLICATION_JSON)
-			.content(convertObjectToJsonBytes(hotel)))
+        mockMvc.perform(delete("/api/hotels/{hotelId}", hotelId).contentType(MediaType.APPLICATION_JSON)
+            .content(convertObjectToJsonBytes(hotel)))
             .andExpect(status().isNoContent());
             
-		verify(hotelService).delete(any(Long.class));
+        verify(hotelService).delete(any(Long.class));
        
     }
+
 	
-
-
 }
