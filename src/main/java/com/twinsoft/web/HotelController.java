@@ -106,14 +106,7 @@ public class HotelController {
 		try {
 			final Hotel newHotel = Hotel.builder().name(hotel.getName()).rating(hotel.getRating()).totalRooms(hotel.getTotalRooms()).build();
 			hotelService.save(newHotel);
-			final List<HotelRoomType> oldRoomTypes = hotel.getHotelRoomTypes();		
-			// We only have data for price and room type  and need to set hotel property for HotelRoomType.			
-			final List<HotelRoomType> newRoomTypes = new ArrayList<HotelRoomType>();
-			oldRoomTypes.stream().forEach(rt -> {
-				final HotelRoomType newRoomType = HotelRoomType.builder().hotel(newHotel).price(rt.getPrice()).roomType(rt.getRoomType()).build();
-				roomService.save(newRoomType);
-				newRoomTypes.add(newRoomType);
-			});
+			final List<HotelRoomType> newRoomTypes = setHotelRoomTypes(hotel.getHotelRoomTypes(), newHotel);
 			newHotel.setHotelRoomTypes(newRoomTypes);		
 			publishHotelEvent(newHotel, EventType.CREATE);
 			
@@ -134,24 +127,14 @@ public class HotelController {
 	 * @return esponseEntity<Hotel>
 	 */
 	@PutMapping(value="/{hotelId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Hotel> update(@PathVariable final Long hotelId, @Valid @RequestBody final Hotel hotel) {	
-
-		
+	public ResponseEntity<Hotel> update(@PathVariable final Long hotelId, @Valid @RequestBody final Hotel hotel) {			
 		
 		Optional.ofNullable(hotelService.findByHotelId(hotelId))
 				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
 			final Hotel updateHotel = Hotel.builder().id(hotelId).name(hotel.getName()).rating(hotel.getRating()).totalRooms(hotel.getTotalRooms()).build();
-//			hotel.setId(hotelId);
 			final Hotel updatedHotel = hotelService.save(updateHotel);
-			final List<HotelRoomType> oldRoomTypes = hotel.getHotelRoomTypes();		
-			// We only have data for price and room type  and need to set hotel property for HotelRoomType.			
-			final List<HotelRoomType> newRoomTypes = new ArrayList<HotelRoomType>();
-			oldRoomTypes.stream().forEach(rt -> {
-				final HotelRoomType newRoomType = HotelRoomType.builder().hotel(updatedHotel).price(rt.getPrice()).roomType(rt.getRoomType()).build();
-				roomService.save(newRoomType);
-				newRoomTypes.add(newRoomType);
-			});
+			final List<HotelRoomType> newRoomTypes = setHotelRoomTypes(hotel.getHotelRoomTypes(), updatedHotel);
 			updatedHotel.setHotelRoomTypes(newRoomTypes);		
 			publishHotelEvent(updatedHotel, EventType.UPDATE);
 			return new ResponseEntity<>(updatedHotel, HttpStatus.OK);
@@ -160,6 +143,7 @@ public class HotelController {
 			throw new UpdateEntityException();
 		}
 	}
+
 	/**
 	 * Rest endpoint for deleting a hotel with requested id.
 	 *
@@ -224,6 +208,31 @@ public class HotelController {
 		return new ResponseEntity<>(manageHotelService.summaryHotelsAvailableRooms(), HttpStatus.OK);
 	}
 	
+
+	/**
+	 * Set missing properties for HotelRoomType.
+	 * 
+	 * @param oldRoomTypes
+	 * @param hotel to set hotel property
+	 * @return List<HotelRoomType> 
+	 */
+	private List<HotelRoomType> setHotelRoomTypes(final List<HotelRoomType> oldRoomTypes, final Hotel hotel) {
+		// We only have data for price and room type  and need to set hotel property for HotelRoomType.			
+		final List<HotelRoomType> newRoomTypes = new ArrayList<HotelRoomType>();
+		oldRoomTypes.stream().forEach(rt -> {
+			final HotelRoomType newRoomType = HotelRoomType.builder().hotel(hotel).price(rt.getPrice()).roomType(rt.getRoomType()).build();
+			roomService.save(newRoomType);
+			newRoomTypes.add(newRoomType);
+		});
+		return newRoomTypes;
+	}
+	
+	/**
+	 * Publish Hotel message events
+	 * 
+	 * @param newHotel
+	 * @param eventType
+	 */
 	private void publishHotelEvent(Hotel newHotel, EventType eventType) {
 		rabbitTemplate.setExchange(exchange);
 		rabbitTemplate.convertAndSend(hotelRequestRoutingKey,
