@@ -129,8 +129,8 @@ public class HotelController {
 	@PutMapping(value="/{hotelId}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Hotel> update(@PathVariable final Long hotelId, @Valid @RequestBody final Hotel hotel) {			
 		
-		Optional.ofNullable(hotelService.findByHotelId(hotelId))
-				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
+//		Optional.ofNullable(hotelService.findByHotelId(hotelId))
+//				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
 			final Hotel updateHotel = Hotel.builder().id(hotelId).name(hotel.getName()).rating(hotel.getRating()).totalRooms(hotel.getTotalRooms()).build();
 			final Hotel updatedHotel = hotelService.save(updateHotel);
@@ -156,7 +156,7 @@ public class HotelController {
 				.ofNullable(hotelService.findByHotelId(hotelId))
 				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
-			hotelService.delete(hotel.getId());
+			hotelService.delete(hotelId);
 			publishHotelEvent(hotel, EventType.DELETE);
 		} catch (final DataIntegrityViolationException e) {
 			log.error("Exception occurred while deleting meter reading with hotel id {}. Cause: ", hotelId, e);
