@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.twinsoft.domain.HotelReservation;
 
 /**
- * The HotelReservation repository
+ * The HotelReservation repository.
  * 
  * @author Miodrag Pavkovic
  */

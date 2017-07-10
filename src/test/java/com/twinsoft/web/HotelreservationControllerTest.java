@@ -6,6 +6,7 @@ package com.twinsoft.web;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -132,7 +133,7 @@ public class HotelreservationControllerTest extends AbstractRestControllerTest {
 				.reservationPrice(BigDecimal.valueOf(1000.00))
 				.build();
         when(hotelReservationService.save(hotelReservation)).thenReturn(savedHotelReservation);
-        
+        when(hotelService.findByHotelId(anyLong())).thenReturn(hotel);
 
         mockMvc.perform(post("/api/hotelreservations")
                 .contentType(APPLICATION_JSON_UTF8)

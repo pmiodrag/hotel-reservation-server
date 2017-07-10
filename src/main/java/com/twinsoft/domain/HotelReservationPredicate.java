@@ -8,6 +8,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
+ * HOtelReserv
+ * 
  * @author Miodrag Pavkovic
  */
 public class HotelReservationPredicate   {
