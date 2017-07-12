@@ -132,7 +132,7 @@ public class HotelreservationControllerTest extends AbstractRestControllerTest {
 				.endDate(LocalDate.of(2017, 8, 21))
 				.reservationPrice(BigDecimal.valueOf(1000.00))
 				.build();
-        when(hotelReservationService.save(hotelReservation)).thenReturn(savedHotelReservation);
+        when(hotelReservationService.save(any(HotelReservation.class))).thenReturn(savedHotelReservation);
         when(hotelService.findByHotelId(anyLong())).thenReturn(hotel);
 
         mockMvc.perform(post("/api/hotelreservations")
