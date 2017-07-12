@@ -11,6 +11,9 @@ import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +55,7 @@ public class HotelServiceImpl implements HotelService {
 	 * @see com.twinsoft.service.HotelService#findAll()
 	 */
 	@Override
+	@Cacheable(value = "Hotel", keyGenerator="keyGenerator")
 	public List<Hotel> findAll() {
 		return repository.findAll();
 	}
@@ -59,20 +63,31 @@ public class HotelServiceImpl implements HotelService {
 	/* (non-Javadoc)
 	 * @see com.twinsoft.service.HotelService#save(com.twinsoft.domain.Hotel)
 	 */
-	@Override
+	@Override	
+	@CacheEvict(value="Hotel", allEntries=true)
 	public Hotel save(Hotel hotel) {
 		final Hotel savedHotel = repository.save(hotel);
-		final String key = HotelCacheKeyUtil.generateHotelKey(hotel.getId(), HotelCacheKeyUtil.KeyType.HOTEL);
-	    saveToCache(key, savedHotel);
+//		final String key = HotelCacheKeyUtil.generateHotelKey(hotel.getId(), HotelCacheKeyUtil.KeyType.HOTEL);
+//	    saveToCache(key, savedHotel);
 		return savedHotel;
+	}
+	
+	@Override
+	@CachePut(value = "Hotel", keyGenerator="keyGenerator")
+	public Hotel update(Hotel hotel) {
+		final Hotel updatedHotel = repository.save(hotel);
+//		final Optional<HotelCacheableBase> key = findByIdFromCache(hotel.getId().toString());
+//	    saveToCache(key, updatedHotel);
+		return updatedHotel;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.twinsoft.service.HotelService#delete(java.lang.String)
 	 */
 	@Override
+	@CacheEvict(value="Hotel", allEntries=true)
 	public void delete(final Long id) {
-	    evictFromCache(HotelCacheKeyUtil.generateHotelKey(id, HotelCacheKeyUtil.KeyType.HOTEL));
+//	    evictFromCache(HotelCacheKeyUtil.generateHotelKey(id, HotelCacheKeyUtil.KeyType.HOTEL));
 		repository.delete(id);
 		
 	}
@@ -81,50 +96,48 @@ public class HotelServiceImpl implements HotelService {
 	 * @see com.twinsoft.service.HotelService#findOne(java.lang.String)
 	 */
 	@Override
+	@Cacheable(value = "Hotel", keyGenerator="keyGenerator")
 	public Hotel findByHotelId(Long id) {
 		return repository.findById(id);
 	}
 
-    @Override
-    public Optional<HotelCacheableBase> findByIdFromCache(final String id) {
-        try {
-            return Optional.ofNullable(redisTemplate.opsForValue()
-                .get(id));
-        } catch (final Exception e) {
-            log.error("Could not retrieve run parameter for hotel " + id + " from cache. Cause: ", e);
-            return Optional.empty();
-        }
-    }
+//    @Override
+//    public Optional<HotelCacheableBase> findByIdFromCache(final String id) {
+//        try {
+//            return Optional.ofNullable(redisTemplate.opsForValue()
+//                .get(id));
+//        } catch (final Exception e) {
+//            log.error("Could not retrieve run parameter for hotel " + id + " from cache. Cause: ", e);
+//            return Optional.empty();
+//        }
+//    }
 
-    @Override
-    public void saveToCache(final String id, final HotelCacheableBase cacheable) {
-        if (cacheable.getClass()
-            .isInstance(new Hotel())) {
-            final Hotel hotelToCache = (Hotel) cacheable;
-            try {
-                redisTemplate.opsForValue()
-                    .set(id, hotelToCache, cacheTtl, TimeUnit.MINUTES);
-                log.info("Hotel {} saved in cache", new Object[] { hotelToCache });
-            } catch (final Exception e) {
-                log.error("Hotel cache" + hotelToCache + " for hotel " + id + " could not be saved to cache. Cause: ",
-                        e);
-            }
-        }
-    }
+//    @Override
+//    public void saveToCache(final String id, final HotelCacheableBase cacheable) {
+//        if (cacheable.getClass()
+//            .isInstance(new Hotel())) {
+//            final Hotel hotelToCache = (Hotel) cacheable;
+//            try {
+//                redisTemplate.opsForValue()
+//                    .set(id, hotelToCache, cacheTtl, TimeUnit.MINUTES);
+//                log.info("Hotel {} saved in cache", new Object[] { hotelToCache });
+//            } catch (final Exception e) {
+//                log.error("Hotel cache" + hotelToCache + " for hotel " + id + " could not be saved to cache. Cause: ",
+//                        e);
+//            }
+//        }
+//    }
 
-    @Override
-    public void evictFromCache(final String id) {
-        try {
-            redisTemplate.delete(id);
-            log.info("Hotel with id {} evicted from cache", new Object[] { id });
-        } catch (final Exception e) {
-            log.error("Hotel  with cache id " + id + " could not be eviced. Cause: ", e);
-        }
-    }
+//    @Override
+//    public void evictFromCache(final String id) {
+//        try {
+//            redisTemplate.delete(id);
+//            log.info("Hotel with id {} evicted from cache", new Object[] { id });
+//        } catch (final Exception e) {
+//            log.error("Hotel  with cache id " + id + " could not be eviced. Cause: ", e);
+//        }
+//    }
 
-	@Override
-	public Hotel update(Hotel hotel) {
-		return repository.save(hotel);
-	}
+	
  
 }

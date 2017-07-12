@@ -17,7 +17,7 @@ No need to setup a database or other software infrastructure. Just write the fun
 
 Service Project:
 
-- It should be based on a completly RESTfull API *(NO User Interface needed)*
+- It should be based on a completely RESTfull API *(NO User Interface needed)*
 - Allow to get/insert/update/delete hotels
 - Allow to get/insert/update/delete hotel reservations
 - Allow to check if the hotel has available rooms by specifying the room type and hotel stars

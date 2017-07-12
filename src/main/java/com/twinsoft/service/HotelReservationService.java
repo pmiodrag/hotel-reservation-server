@@ -34,4 +34,9 @@ public interface HotelReservationService {
 	 * @param id to delete hotel reservation entity with requested id
 	 */
 	void delete(Long id);
+	/**
+	 * @param hotelReservation
+	 * @return
+	 */
+	HotelReservation update(HotelReservation hotelReservation);
 }

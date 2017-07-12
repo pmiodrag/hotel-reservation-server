@@ -27,6 +27,8 @@ import com.twinsoft.service.HotelService;
 import com.twinsoft.service.ManageHotelService;
 
 /**
+ * Abstract controller to mock required beans in test classes and to define utility methods.
+ * 
  * @author Miodrag Pavkovic
  */
 public abstract class AbstractRestControllerTest {
@@ -58,7 +60,7 @@ public abstract class AbstractRestControllerTest {
 		}
 		
 		/**
-		 * @return HotelRoomService mock
+		 * @return HotelRoomTypeService mock
 		 */
 		@Bean
 		public HotelRoomTypeService hotelRoomService() {

@@ -143,49 +143,44 @@ public class HotelreservationControllerTest extends AbstractRestControllerTest {
         .andExpect(status().isCreated());
                 
     	verify(hotelReservationService, times(1)).save(any(HotelReservation.class));
-//    	verifyNoMoreInteractions(hotelReservationService);
+    	verifyNoMoreInteractions(hotelReservationService);
     }
-//	
-//	@Test
-//	public void testUpdateHotel() throws Exception {   
-//		final Long hotelId = 1L;
-//		final Hotel updateHotel = Hotel.builder().id(hotelId).name("Rossa De Mar").rating( HotelRating.THREE_STAR).totalRooms(Integer.valueOf(2)).build();	
-//		when(hotelService.findByHotelId(any(Long.class))).thenReturn(updateHotel);
-//		final Hotel updatedHotel = Hotel.builder().id(hotelId).name(updateHotel.getName()).rating(updateHotel.getRating()).totalRooms(updateHotel.getTotalRooms()).build();
-//		
-//		final HotelRoomType newHotelRoomType = HotelRoomType.builder().hotel(updatedHotel).roomType(RoomType.SINGLE).price(BigDecimal.valueOf(100.00)).build();
-//		updateHotel.setHotelRoomTypes(Lists.newArrayList(newHotelRoomType));
-//		when(hotelService.save(updateHotel)).thenReturn(updatedHotel);
-////        // Mock HotelRoomType entity after saving, set id
-//		final HotelRoomType savedHotelRoomType = HotelRoomType.builder().id(hotelId).hotel(updatedHotel).roomType(RoomType.SINGLE).price(BigDecimal.valueOf(100.00)).build();
-//		when(roomService.save(newHotelRoomType)).thenReturn(savedHotelRoomType);
-////		updatedHotel.setHotelRoomTypes(Lists.newArrayList(savedHotelRoomType));
-//////
-////        mockMvc.perform(put("/api/hotels/{hotelId}", hotelId)
-////                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-////                .content(TestUtil.convertObjectToJsonBytes(updateHotel))
-////        )
-////        .andDo(MockMvcResultHandlers.print())
-////        .andExpect(status().isOk());
-////	                
-////    	verify(hotelService, times(1)).save(updateHotel);
-////    	verifyNoMoreInteractions(hotelService);
-//
-//	}
-//	
-//	@Test
-//    public void testDeleteHotel() throws Exception {
-//		final Long hotelId = 1L;
-//		final Hotel hotel = Hotel.builder().id(1L).name("Rossa De Mar").rating( HotelRating.THREE_STAR).totalRooms(Integer.valueOf(2)).build();
-//        when(hotelService.findByHotelId(any(Long.class))).thenReturn(hotel);
-//        
-//		mockMvc.perform(delete("/api/hotels/{hotelId}", hotelId).contentType(MediaType.APPLICATION_JSON)
-//			.content(convertObjectToJsonBytes(hotel)))
-//            .andExpect(status().isNoContent());
-//            
-//		verify(hotelService).delete(any(Long.class));
-//       
-//    }
+
+	@Test
+    public void testUpdateHotelReservation() throws Exception {    	
+		final Hotel hotel = Hotel.builder().name("Rossa De Mar").rating( HotelRating.THREE_STAR).totalRooms(Integer.valueOf(2)).build();	
+		final HotelRoomType hotelRoomType = HotelRoomType.builder().roomType(RoomType.SINGLE).price(BigDecimal.valueOf(100.00)).build();
+		final List<HotelRoomType> hotelRoomTypes = Lists.newArrayList(hotelRoomType);
+		hotel.setHotelRoomTypes(hotelRoomTypes);
+		final HotelReservation hotelReservation = HotelReservation.builder()
+				.hotel(hotel)
+				.roomType(RoomType.SINGLE)
+				.startDate(LocalDate.of(2017, 8, 11))
+				.endDate(LocalDate.of(2017, 8, 21))
+				.reservationPrice(BigDecimal.valueOf(1000.00))
+				.build();
+		// Mock Hotel reservation entity after saving
+		final HotelReservation savedHotelReservation = HotelReservation.builder()
+				.id(1L)
+				.hotel(hotel)
+				.roomType(RoomType.SINGLE)
+				.startDate(LocalDate.of(2017, 8, 11))
+				.endDate(LocalDate.of(2017, 8, 21))
+				.reservationPrice(BigDecimal.valueOf(1000.00))
+				.build();
+        when(hotelReservationService.update(hotelReservation)).thenReturn(savedHotelReservation);
+        when(hotelService.findByHotelId(anyLong())).thenReturn(hotel);
+
+        mockMvc.perform(post("/api/hotelreservations")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(convertObjectToJsonBytes(hotelReservation))
+        )
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(status().isCreated());
+                
+    	verify(hotelReservationService, times(1)).save(any(HotelReservation.class));
+    	verifyNoMoreInteractions(hotelReservationService);
+    }
 	
 
 

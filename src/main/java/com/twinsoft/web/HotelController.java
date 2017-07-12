@@ -48,7 +48,8 @@ import com.twinsoft.util.exception.UpdateEntityException;
 import lombok.extern.slf4j.Slf4j;
 /**
  * Rest controller for exposing Hotel endpoints.
- * @author miodrag
+ *
+ * @author Miodrag Pavkovic
  */
 @Slf4j
 @RestController
@@ -114,7 +115,7 @@ public class HotelController {
 			httpHeaders.setLocation(builder.path("/hotels/{hotelId}").buildAndExpand(newHotel.getId()).toUri());
 			return httpHeaders;
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
-			throw new PersistEntityException("createMeterReadingError");
+			throw new PersistEntityException("create Hotel Error");
 		}
 	}
 	

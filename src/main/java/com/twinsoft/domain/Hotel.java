@@ -64,6 +64,7 @@ public class Hotel implements Serializable, HotelCacheableBase {
 
 	/** The hotel room types. */
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "hotel", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<HotelRoomType> hotelRoomTypes = new ArrayList<>();
 
 }

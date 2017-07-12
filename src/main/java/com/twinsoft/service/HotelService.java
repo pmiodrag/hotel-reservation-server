@@ -10,7 +10,7 @@ import com.twinsoft.util.caching.HotelCacheServiceBase;
  *
  * @author Miodrag Pavkovic
  */
-public interface HotelService extends HotelCacheServiceBase {
+public interface HotelService  {
 	
 	/**
 	 * Find specific hotel.

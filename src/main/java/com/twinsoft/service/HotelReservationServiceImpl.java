@@ -60,6 +60,15 @@ public class HotelReservationServiceImpl implements HotelReservationService {
 	public void delete(final Long id) {
 		hotelReservationRepository.delete(id);		
 	}
+
+	/* (non-Javadoc)
+	 * @see com.twinsoft.service.HotelReservationService#update(com.twinsoft.domain.HotelReservation)
+	 */
+	@Override
+	public HotelReservation update(HotelReservation hotelReservation) {
+		// TODO Auto-generated method stub
+		return hotelReservationRepository.save(hotelReservation);
+	}
 	
 
 	
