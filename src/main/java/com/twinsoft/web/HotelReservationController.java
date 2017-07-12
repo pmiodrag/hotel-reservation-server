@@ -123,7 +123,7 @@ public class HotelReservationController {
 				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
 			hotelReservation.setId(hotelReservationId);
-			final HotelReservation updateHotelReservation = hotelReservationService.save(hotelReservation);
+			final HotelReservation updateHotelReservation = hotelReservationService.update(hotelReservation);
 			return new ResponseEntity<>(updateHotelReservation, HttpStatus.OK);
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
 			log.error("Exception occurred while updating hotel reservation with id {}. Cause: ", hotelReservationId, e);

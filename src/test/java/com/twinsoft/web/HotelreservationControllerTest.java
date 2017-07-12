@@ -168,17 +168,17 @@ public class HotelreservationControllerTest extends AbstractRestControllerTest {
 				.endDate(LocalDate.of(2017, 8, 21))
 				.reservationPrice(BigDecimal.valueOf(1000.00))
 				.build();
-        when(hotelReservationService.update(hotelReservation)).thenReturn(savedHotelReservation);
+        when(hotelReservationService.update(any(HotelReservation.class))).thenReturn(savedHotelReservation);
         when(hotelService.findByHotelId(anyLong())).thenReturn(hotel);
 
-        mockMvc.perform(post("/api/hotelreservations")
+        mockMvc.perform(put("/api/hotelreservations/{hotelReservationId}", 1L)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(hotelReservation))
         )
         .andDo(MockMvcResultHandlers.print())
-        .andExpect(status().isCreated());
+        .andExpect(status().isOk());
                 
-    	verify(hotelReservationService, times(1)).save(any(HotelReservation.class));
+    	verify(hotelReservationService, times(1)).update(any(HotelReservation.class));
     	verifyNoMoreInteractions(hotelReservationService);
     }
 	
