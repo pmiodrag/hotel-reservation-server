@@ -67,25 +67,7 @@ public class HotelServiceTest {
 		hotelService.save(any(Hotel.class));
 		verify(hotelRepository).save(any(Hotel.class));
 	}
-//
-//	/**
-//	 * Test for updating a meterReading
-//	 */
-//	@Test
-//	public void update() {
-//		when(hotelReservationRepository.save(any(HotelReservation.class))).thenReturn(getHotelReservation(1L));
-//		hotelReservationService.save(any(HotelReservation.class));
-//		verify(hotelReservationRepository).save(any(HotelReservation.class));
-//	}
-	
 
-//	/**
-//	 * Test for delete a meterReading
-//	 */
-//	 @Test
-//	 public void delete() {
-//	
-//	 }
 
 	 /**
 	 * @return

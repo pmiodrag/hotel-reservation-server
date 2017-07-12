@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.twinsoft.service;
 
 import java.util.List;
@@ -8,7 +5,6 @@ import java.util.Map;
 
 import com.twinsoft.domain.Hotel;
 import com.twinsoft.domain.HotelRating;
-import com.twinsoft.domain.HotelReservation;
 import com.twinsoft.domain.HotelRoomType;
 import com.twinsoft.domain.RoomType;
 

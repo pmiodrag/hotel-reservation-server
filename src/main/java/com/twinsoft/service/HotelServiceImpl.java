@@ -4,8 +4,6 @@
 package com.twinsoft.service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -13,14 +11,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.twinsoft.domain.Hotel;
 import com.twinsoft.repository.HotelRepository;
-import com.twinsoft.util.caching.HotelCacheKeyUtil;
-import com.twinsoft.util.caching.HotelCacheableBase;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -75,7 +75,7 @@ public class HotelReservationServiceTest {
 	}
 
 	/**
-	 * Test for updating a meterReading
+	 * Test for updating a HotelReservation.
 	 */
 	@Test
 	public void update() {
@@ -85,7 +85,7 @@ public class HotelReservationServiceTest {
 	}
 
 	 /**
-	 * Test for delete a meterReading
+	 * Test for delete a HotelReservation.
 	 */
 	 @Test
 	 public void delete() {

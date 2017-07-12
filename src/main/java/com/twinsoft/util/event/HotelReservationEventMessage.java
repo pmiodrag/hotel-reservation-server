@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import com.twinsoft.domain.RoomType;
 import lombok.Data;
 
+/**
+ * @author Miodrag Pavkovic
+ */
 @Data
 public class HotelReservationEventMessage {
 

@@ -8,7 +8,7 @@ import com.twinsoft.domain.HotelRoomType;
 /**
  * The HotelRoomType repository.
  *
- * @author miodrag
+ * @author Miodrag Pavkovic
  */
 @Repository
 public interface HotelRoomTypeRepository extends CrudRepository<HotelRoomType, Long> {

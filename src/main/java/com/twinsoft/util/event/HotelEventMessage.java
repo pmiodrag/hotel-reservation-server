@@ -2,6 +2,11 @@ package com.twinsoft.util.event;
 
 import lombok.Data;
 
+/**
+ * HotelEventMessage entity.
+ * 
+ * @author Miodrag Pavkovic
+ */
 @Data
 public class HotelEventMessage {
 

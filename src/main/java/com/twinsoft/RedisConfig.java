@@ -6,9 +6,6 @@ package com.twinsoft;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 
-import javax.inject.Inject;
-
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -18,7 +15,6 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -38,9 +34,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 	public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
-	// /** The connection factory. */
-	// @Inject
-	// private JedisConnectionFactory connectionFactory;
 
 	@Bean
 	public JedisConnectionFactory jedisConnectionFactory() {
@@ -67,21 +60,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 		return new GenericJackson2JsonRedisSerializer();
 	}
 
-	// /**
-	// * Redis template used for handling hotel
-	// *
-	// * @return the redis template
-	// */
-	// @Bean(name = "hotelRedisTemplate")
-	// public RedisTemplate<String, Hotel> hotelRedisTemplate() {
-	// final RedisTemplate<String, Hotel> redisTemplate = new RedisTemplate<>();
-	// redisTemplate.setConnectionFactory(connectionFactory);
-	// redisTemplate.setKeySerializer(new GenericToStringSerializer<String>(String.class));
-	// final Jackson2JsonRedisSerializer<Hotel> serializer = new Jackson2JsonRedisSerializer<>(Hotel.class);
-	// serializer.setObjectMapper(redisObjectMapper());
-	// redisTemplate.setValueSerializer(serializer);
-	// return redisTemplate;
-	// }
 
 	/**
 	 * Redis template used for handling hotel
@@ -97,7 +75,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 		final Jackson2JsonRedisSerializer<Hotel> serializer = new Jackson2JsonRedisSerializer<>(Hotel.class);
 		serializer.setObjectMapper(redisObjectMapper());
 		redisTemplate.setValueSerializer(serializer);
-//		redisTemplate.setValueSerializer(genericJackson2JsonRedisJsonSerializer());
 		return redisTemplate;
 	}
 

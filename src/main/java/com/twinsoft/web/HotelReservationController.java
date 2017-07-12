@@ -17,7 +17,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +33,6 @@ import com.twinsoft.domain.HotelReservation;
 import com.twinsoft.service.HotelReservationService;
 import com.twinsoft.service.HotelService;
 import com.twinsoft.util.event.EventType;
-import com.twinsoft.util.event.HotelEventMessage;
 import com.twinsoft.util.event.HotelReservationEventMessage;
 import com.twinsoft.util.exception.DeleteEntityException;
 import com.twinsoft.util.exception.PersistEntityException;
@@ -46,7 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Rest controller for exposing hotel reservation endpoints.
  * 
- * @author miodrag
+ * @author Miodrag Pavkovic
  */
 @Slf4j
 @RestController
@@ -105,7 +103,7 @@ public class HotelReservationController {
 					.buildAndExpand(newHotelReservation.getId()).toUri());
 			return httpHeaders;
 		} catch (IllegalArgumentException | TransactionRequiredException e) {
-			throw new PersistEntityException("createMeterReadingError");
+			throw new PersistEntityException("createHotelEntityError");
 		}
 	}
 

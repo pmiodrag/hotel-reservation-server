@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.persistence.TransactionRequiredException;
@@ -171,7 +170,7 @@ public class HotelController {
 			hotelService.delete(hotelId);
 			publishHotelEvent(hotel, EventType.DELETE);
 		} catch (final DataIntegrityViolationException e) {
-			log.error("Exception occurred while deleting meter reading with hotel id {}. Cause: ", hotelId, e);
+			log.error("Exception occurred while deleting hotel entity with hotel id {}. Cause: ", hotelId, e);
 			throw new DeleteEntityException("deleteError");
 		}
 	}

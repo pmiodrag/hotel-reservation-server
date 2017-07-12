@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.twinsoft.security;
 
 import javax.inject.Inject;

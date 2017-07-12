@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.twinsoft;
 
 import java.text.SimpleDateFormat;
