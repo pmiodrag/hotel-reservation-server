@@ -95,6 +95,17 @@ public class HotelController {
 	}
 	
 	/**
+	 * Rest endpoint for retrieving  hotel by id.
+	 *
+	 * @return ResponseEntity<Hotel>
+	 */
+	@GetMapping(value="/{hotelId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Hotel> findByHotellId(@PathVariable final Long hotelId) {
+		Optional.ofNullable(hotelService.findByHotelId(hotelId))
+		.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
+		return new ResponseEntity<>(hotelService.findByHotelId(hotelId), HttpStatus.OK);
+	}	
+	/**
 	 * Rest endpoint for creating and saving hotel.
 	 * 
 	 * @param hotel the hotel to create and save
