@@ -93,16 +93,12 @@ public class HotelreservationControllerTest extends AbstractRestControllerTest {
         .andExpect(jsonPath("$[0].hotel.rating", is(HotelRating.THREE_STAR.toString())))
         .andExpect(jsonPath("$[0].hotel.totalRooms", is(2)))
         .andExpect(jsonPath("$[0].roomType", is(RoomType.DOUBLE.toString())))
-//        .andExpect(jsonPath("$[0].startDate", is(LocalDate.of(2017, 8, 11).format(DateTimeFormatter.ISO_LOCAL_DATE))))
-//		.andExpect(jsonPath("$[0].endDate", is(LocalDate.of(2017, 8, 21).format(DateTimeFormatter.ISO_DATE))))
 		.andExpect(jsonPath("$[0].reservationPrice", is(1000.00)))
         .andExpect(jsonPath("$[1].id", is(2)))
         .andExpect(jsonPath("$[1].hotel.name", is("Rossa De Mar 2")))
         .andExpect(jsonPath("$[1].hotel.rating", is(HotelRating.FOUR_STAR.toString())))
         .andExpect(jsonPath("$[1].hotel.totalRooms", is(2)))
         .andExpect(jsonPath("$[1].roomType", is(RoomType.DOUBLE.toString())))
-//        .andExpect(jsonPath("$[1].startDate", is(LocalDate.of(2017, 10, 11).format(DateTimeFormatter.ISO_DATE))))
-//		.andExpect(jsonPath("$[1].endDate", is(LocalDate.of(2017, 10, 21).format(DateTimeFormatter.ISO_DATE))))
 		.andExpect(jsonPath("$[1].reservationPrice", is(1400.00)));    
 
     	verify(hotelReservationService, times(1)).findAll();

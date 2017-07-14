@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.twinsoft.web;
 
 import java.util.ArrayList;

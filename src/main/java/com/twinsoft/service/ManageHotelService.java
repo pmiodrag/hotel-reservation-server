@@ -9,6 +9,8 @@ import com.twinsoft.domain.HotelRoomType;
 import com.twinsoft.domain.RoomType;
 
 /**
+ * ManageHotelService interface
+ * 
  * @author Miodrag Pavkovic
  */
 public interface ManageHotelService {

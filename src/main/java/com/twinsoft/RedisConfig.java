@@ -6,6 +6,7 @@ package com.twinsoft;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -33,13 +34,16 @@ import com.twinsoft.domain.Hotel;
 public class RedisConfig extends CachingConfigurerSupport {
 
 	public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
-
+	@Value("${spring.redis.host}")
+    private String host;
+	@Value("${spring.redis.port}")
+    private int port;
 
 	@Bean
 	public JedisConnectionFactory jedisConnectionFactory() {
 		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-		jedisConnectionFactory.setHostName("127.0.0.1");
-		jedisConnectionFactory.setPort(6379);
+		jedisConnectionFactory.setHostName(host);
+		jedisConnectionFactory.setPort(port);
 		jedisConnectionFactory.setUsePool(true);
 		return jedisConnectionFactory;
 	}

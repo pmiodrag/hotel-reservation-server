@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.twinsoft.util.caching.HotelCacheableBase;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +40,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @ToString(exclude = "hotelRoomTypes")
-public class Hotel implements Serializable, HotelCacheableBase {
+public class Hotel implements Serializable {
 
 	private static final long serialVersionUID = 8690390386555199353L;
 

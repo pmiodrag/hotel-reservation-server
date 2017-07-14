@@ -26,6 +26,8 @@ import com.twinsoft.domain.RoomType;
 import com.twinsoft.repository.HotelReservationRepository;
 
 /**
+ * HotelReservationServiceTest tests for HotelReservationService
+ * 
  * @author Miodrag Pavkovic
  */
 public class HotelReservationServiceTest {

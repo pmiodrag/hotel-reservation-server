@@ -5,6 +5,8 @@ import com.twinsoft.domain.RoomType;
 import lombok.Data;
 
 /**
+ * HotelReservationEventMessage entity
+ * 
  * @author Miodrag Pavkovic
  */
 @Data
